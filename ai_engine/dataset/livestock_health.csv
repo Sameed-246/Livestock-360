@@ -1,0 +1,28 @@
+animal_type,age,gender,vaccination_status,symptoms,temperature,risk_level,disease
+Cattle,5,Female,1,Fever Cough,40.5,High,Respiratory infection
+Cattle,3,Male,1,Normal appetite,38.5,Low,None
+Cattle,7,Female,0,Fever Reduced appetite,40.2,High,Infection
+Cattle,2,Female,1,Cough Nasal discharge,39.8,Medium,Respiratory infection
+Cattle,6,Male,1,Fever Breathing difficulty,40.8,High,Respiratory infection
+Cattle,4,Female,1,Normal healthy,38.6,Low,None
+Cattle,8,Female,0,Not eating Fever,40.3,High,Infection
+Cattle,3,Male,1,Mild cough,39.2,Medium,Respiratory infection
+Goat,2,Female,1,Fever Cough,40.1,High,Respiratory infection
+Goat,1,Male,1,Normal appetite,39.0,Low,None
+Goat,4,Female,0,Reduced appetite Fever,40.0,High,Infection
+Goat,3,Male,1,Mild cough,39.5,Medium,Respiratory infection
+Goat,5,Female,1,Normal healthy,38.8,Low,None
+Sheep,3,Female,1,Fever Cough,40.4,High,Respiratory infection
+Sheep,2,Male,1,Normal healthy,39.0,Low,None
+Sheep,5,Female,0,Not eating Fever,40.1,High,Infection
+Sheep,4,Male,1,Mild cough,39.4,Medium,Respiratory infection
+Buffalo,6,Female,1,Fever Breathing difficulty,40.7,High,Respiratory infection
+Buffalo,4,Male,1,Normal appetite,38.7,Low,None
+Buffalo,8,Female,0,Fever Reduced appetite,40.2,High,Infection
+Buffalo,3,Female,1,Mild cough,39.3,Medium,Respiratory infection
+Cattle,5,Female,0,Fever Diarrhea,40.3,High,Infection
+Cattle,4,Male,0,Diarrhea Reduced appetite,40.0,High,Infection
+Goat,3,Female,1,Fever Diarrhea,40.1,High,Infection
+Goat,2,Male,1,Diarrhea Reduced appetite,39.8,Medium,Infection
+Sheep,4,Female,0,Fever Diarrhea Not eating,40.2,High,Infection
+Buffalo,5,Male,1,Diarrhea Reduced appetite,39.9,Medium,Infection

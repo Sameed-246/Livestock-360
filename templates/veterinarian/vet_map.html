@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Disease Surveillance Map | Livestock 360°
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+            background: #f3f8f5;
+            color: #18352a;
+        }
+
+        .header {
+            background: #137a46;
+            color: white;
+            padding: 18px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow:
+                0 3px 15px rgba(0, 0, 0, 0.10);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+
+            background: white;
+            color: #137a46;
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 24px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .brand p {
+            margin: 3px 0 0;
+            font-size: 12px;
+            opacity: 0.85;
+        }
+
+        .doctor {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+
+            color: #137a46;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        .title h2 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .title p {
+            color: #6d7b74;
+            margin-top: 8px;
+        }
+
+        .legend {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+
+            margin: 22px 0;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .high-dot {
+            background: #d73535;
+        }
+
+        .medium-dot {
+            background: #e2a51c;
+        }
+
+        .low-dot {
+            background: #269257;
+        }
+
+        .unknown-dot {
+            background: #777777;
+        }
+
+        .map-card {
+            background: white;
+            border-radius: 22px;
+            padding: 12px;
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        #map {
+            width: 100%;
+            height: 650px;
+            border-radius: 16px;
+        }
+
+        .info-card {
+            margin-top: 20px;
+
+            background: white;
+            border-radius: 18px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-card h3 {
+            margin-top: 0;
+        }
+
+        .info-card p {
+            color: #617069;
+            line-height: 1.6;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6d7b74;
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .popup-title {
+            font-weight: bold;
+            color: #137a46;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .popup-row {
+            margin: 6px 0;
+        }
+
+        .risk-high {
+            color: #c52f2f;
+            font-weight: bold;
+        }
+
+        .risk-medium {
+            color: #9b6b00;
+            font-weight: bold;
+        }
+
+        .risk-low {
+            color: #197844;
+            font-weight: bold;
+        }
+
+        .risk-unknown {
+            color: #666666;
+            font-weight: bold;
+        }
+
+        .popup-button {
+            display: inline-block;
+            margin-top: 8px;
+
+            padding: 8px 12px;
+
+            background: #137a46;
+            color: white;
+
+            text-decoration: none;
+            border-radius: 8px;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .popup-button:hover {
+            background: #0e6339;
+        }
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 15px;
+            }
+
+            .doctor {
+                display: none;
+            }
+
+            .container {
+                padding: 18px 12px;
+            }
+
+            .title h2 {
+                font-size: 24px;
+            }
+
+            #map {
+                height: 500px;
+            }
+
+            .legend {
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🗺️
+        </div>
+
+        <div>
+
+            <h1>
+                Livestock 360°
+            </h1>
+
+            <p>
+                Disease Surveillance System
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="doctor">
+
+        🩺 Dr. {{ request.user.username }}
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+
+    <a
+        href="{% url 'vet_dashboard' %}"
+        class="back"
+    >
+        ← Back to Veterinarian Dashboard
+    </a>
+
+
+    <section class="title">
+
+        <h2>
+            🗺️ Disease Surveillance Map
+        </h2>
+
+        <p>
+            Monitor reported livestock health cases
+            and identify geographic risk patterns.
+        </p>
+
+    </section>
+
+
+    <!-- MAP LEGEND -->
+
+    <div class="legend">
+
+        <div class="legend-item">
+
+            <span class="dot high-dot"></span>
+
+            🔴 High Risk
+
+        </div>
+
+
+        <div class="legend-item">
+
+            <span class="dot medium-dot"></span>
+
+            🟡 Medium Risk
+
+        </div>
+
+
+        <div class="legend-item">
+
+            <span class="dot low-dot"></span>
+
+            🟢 Low Risk
+
+        </div>
+
+
+        <div class="legend-item">
+
+            <span class="dot unknown-dot"></span>
+
+            ⚪ AI Pending
+
+        </div>
+
+    </div>
+
+
+    <!-- MAP -->
+
+    <div class="map-card">
+
+        {% if reports %}
+
+            <div id="map"></div>
+
+        {% else %}
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🗺️
+                </div>
+
+                <h3>
+                    No mapped disease reports yet
+                </h3>
+
+                <p>
+                    Reports containing location information
+                    will appear on the surveillance map.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- INFORMATION -->
+
+    <div class="info-card">
+
+        <h3>
+            📊 Surveillance Information
+        </h3>
+
+        <p>
+            This map helps veterinarians identify
+            geographic patterns in reported livestock
+            health cases and prioritize field response.
+        </p>
+
+        <p>
+            Location coordinates are used internally
+            for disease surveillance and mapping.
+        </p>
+
+        <p>
+            AI results shown on this map are intended
+            for early-warning support and should not
+            replace professional veterinary judgment.
+        </p>
+
+    </div>
+
+
+</main>
+
+
+<!--
+    Hidden report data.
+
+    Django renders the information here as HTML.
+    JavaScript reads the data later.
+-->
+
+<div id="reportData" style="display: none;">
+
+    {% for report in reports %}
+
+        <div
+            class="report-marker-data"
+
+            data-report-id="{{ report.id }}"
+
+            data-latitude="{{ report.latitude }}"
+
+            data-longitude="{{ report.longitude }}"
+
+            data-animal-id="{{ report.animal.animal_id }}"
+
+            data-animal-type="{{ report.animal.animal_type }}"
+
+            data-symptoms="{{ report.symptoms|truncatechars:80 }}"
+
+            data-risk="{{ report.risk_score|default_if_none:'' }}"
+
+            data-risk-level="{{ report.risk_level|default:'' }}"
+
+            data-disease="{{ report.predicted_disease|default:'AI assessment pending' }}"
+
+            data-location="{{ report.location_address|default:'Location recorded' }}"
+
+            data-status="{{ report.status }}"
+
+            data-report-url="{% url 'vet_case_detail' report.id %}"
+        >
+        </div>
+
+    {% endfor %}
+
+</div>
+
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script>
+
+    const reportData =
+        document.querySelectorAll(
+            ".report-marker-data"
+        );
+
+
+    if (reportData.length > 0) {
+
+        const map =
+            L.map("map").setView(
+                [20.5937, 78.9629],
+                5
+            );
+
+
+        L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+            {
+                attribution:
+                    '© Esri, HERE, Garmin, © OpenStreetMap contributors'
+            }
+        ).addTo(map);
+
+
+        const bounds = [];
+
+
+        /*
+            Django sends reports in newest-first order.
+
+            We reverse them here so older reports are drawn first
+            and newer reports are drawn last.
+
+            This means when multiple reports have the same
+            location, the newest report appears on top.
+        */
+
+        Array.from(reportData)
+            .reverse()
+            .forEach(
+                function (item) {
+
+                    const latitude =
+                        parseFloat(
+                            item.dataset.latitude
+                        );
+
+
+                    const longitude =
+                        parseFloat(
+                            item.dataset.longitude
+                        );
+
+
+                    if (
+                        Number.isNaN(latitude) ||
+                        Number.isNaN(longitude)
+                    ) {
+                        return;
+                    }
+
+
+                    const reportId =
+                        parseInt(
+                            item.dataset.reportId
+                        );
+
+
+                    const animalId =
+                        item.dataset.animalId;
+
+
+                    const animalType =
+                        item.dataset.animalType;
+
+
+                    const symptoms =
+                        item.dataset.symptoms;
+
+
+                    const riskValue =
+                        item.dataset.risk;
+
+
+                    const riskLevel =
+                        item.dataset.riskLevel;
+
+
+                    const disease =
+                        item.dataset.disease;
+
+
+                    const location =
+                        item.dataset.location;
+
+
+                    const status =
+                        item.dataset.status;
+
+
+                    const reportUrl =
+                        item.dataset.reportUrl;
+
+
+                    /*
+                        Determine marker appearance
+                        from the STORED AI risk level.
+
+                        This keeps the map consistent
+                        with the veterinarian dashboard.
+                    */
+
+                    let markerColor =
+                        "#777777";
+
+
+                    let riskText =
+                        "AI assessment pending";
+
+
+                    let riskClass =
+                        "risk-unknown";
+
+
+                    if (riskLevel === "High") {
+
+                        markerColor =
+                            "#d73535";
+
+
+                        riskText =
+                            "High Risk — "
+                            + riskValue
+                            + "%";
+
+
+                        riskClass =
+                            "risk-high";
+
+                    }
+
+                    else if (riskLevel === "Medium") {
+
+                        markerColor =
+                            "#e2a51c";
+
+
+                        riskText =
+                            "Medium Risk — "
+                            + riskValue
+                            + "%";
+
+
+                        riskClass =
+                            "risk-medium";
+
+                    }
+
+                    else if (riskLevel === "Low") {
+
+                        markerColor =
+                            "#269257";
+
+
+                        riskText =
+                            "Low Risk — "
+                            + riskValue
+                            + "%";
+
+
+                        riskClass =
+                            "risk-low";
+
+                    }
+
+
+                    /*
+                        Create the map marker.
+                    */
+
+                    const marker =
+                        L.circleMarker(
+                            [latitude, longitude],
+                            {
+                                radius: 10,
+                                fillColor: markerColor,
+                                color: "#ffffff",
+                                weight: 2,
+                                opacity: 1,
+                                fillOpacity: 0.85
+                            }
+                        ).addTo(map);
+
+
+                    /*
+                        Make sure the newest marker stays
+                        visually above older markers.
+                    */
+
+                    marker.bringToFront();
+
+
+                    /*
+                        Popup information.
+                    */
+
+                    const popupContent =
+
+                        "<div>" +
+
+                        "<div class='popup-title'>" +
+                        "🐄 " +
+                        animalId +
+                        "</div>" +
+
+                        "<div class='popup-row'>" +
+                        "<strong>Report ID:</strong> #" +
+                        reportId +
+                        "</div>" +
+
+                        "<div class='popup-row'>" +
+                        "<strong>Type:</strong> " +
+                        animalType +
+                        "</div>" +
+
+                        "<div class='popup-row'>" +
+                        "<strong>Symptoms:</strong> " +
+                        symptoms +
+                        "</div>" +
+
+                        "<div class='popup-row " +
+                        riskClass +
+                        "'>" +
+                        "<strong>Risk:</strong> " +
+                        riskText +
+                        "</div>" +
+
+                        "<div class='popup-row'>" +
+                        "<strong>Condition:</strong> " +
+                        disease +
+                        "</div>" +
+
+                        "<div class='popup-row'>" +
+                        "<strong>Location:</strong> " +
+                        location +
+                        "</div>" +
+
+                        "<div class='popup-row'>" +
+                        "<strong>Status:</strong> " +
+                        status +
+                        "</div>" +
+
+                        "<a class='popup-button' " +
+                        "href='" +
+                        reportUrl +
+                        "'>" +
+                        "Review Case" +
+                        "</a>" +
+
+                        "</div>";
+
+
+                    marker.bindPopup(
+                        popupContent
+                    );
+
+
+                    bounds.push(
+                        [latitude, longitude]
+                    );
+
+                }
+            );
+
+
+        /*
+            Automatically zoom the map
+            to include all available reports.
+        */
+
+        if (bounds.length > 0) {
+
+            map.fitBounds(
+                bounds,
+                {
+                    padding: [30, 30]
+                }
+            );
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

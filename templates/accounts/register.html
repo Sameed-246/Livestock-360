@@ -1,0 +1,485 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Farmer Account | Livestock 360°</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eaf7ee, #f8fbf9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            min-height: 650px;
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+        }
+
+        /* =========================
+           LEFT PANEL
+        ========================== */
+
+        .left-panel {
+            width: 45%;
+            background: linear-gradient(145deg, #14532d, #198754);
+            color: white;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .logo span {
+            color: #b9f6ca;
+        }
+
+        .tagline {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .feature-text h4 {
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .feature-text p {
+            font-size: 12px;
+            line-height: 1.4;
+            opacity: 0.75;
+        }
+
+        /* =========================
+           RIGHT PANEL
+        ========================== */
+
+        .right-panel {
+            width: 55%;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-title {
+            font-size: 30px;
+            color: #173b28;
+            margin-bottom: 8px;
+        }
+
+        .form-subtitle {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 7px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #d8dedb;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #198754;
+            box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        .general-error {
+            background: #fff0f0;
+            border: 1px solid #ffcaca;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           BUTTON
+        ========================== */
+
+        .register-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #198754;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 5px;
+        }
+
+        .register-btn:hover {
+            background: #146c43;
+            transform: translateY(-1px);
+        }
+
+        .register-btn:active {
+            transform: translateY(0);
+        }
+
+        /* =========================
+           LOGIN LINK
+        ========================== */
+
+        .login-text {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .login-text a {
+            color: #198754;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .login-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           SECURITY
+        ========================== */
+
+        .security {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 11px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 768px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                flex-direction: column;
+                min-height: auto;
+                border-radius: 18px;
+            }
+
+            .left-panel {
+                width: 100%;
+                padding: 30px 25px;
+            }
+
+            .logo {
+                font-size: 26px;
+            }
+
+            .tagline {
+                margin-bottom: 25px;
+            }
+
+            .feature {
+                margin-bottom: 14px;
+            }
+
+            .right-panel {
+                width: 100%;
+                padding: 30px 25px;
+            }
+
+            .form-title {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- =========================
+         LEFT PANEL
+    ========================== -->
+
+    <div class="left-panel">
+
+        <div class="logo">
+            🐄 Livestock <span>360°</span>
+        </div>
+
+        <p class="tagline">
+            AI-assisted livestock health monitoring
+            and early disease warning platform.
+        </p>
+
+        <div class="feature">
+            <div class="feature-icon">🤖</div>
+
+            <div class="feature-text">
+                <h4>AI Health Risk Assessment</h4>
+                <p>
+                    Identify potential livestock health risks early.
+                </p>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🗺️</div>
+
+            <div class="feature-text">
+                <h4>Disease Surveillance</h4>
+                <p>
+                    Monitor reported livestock health risks by location.
+                </p>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🔔</div>
+
+            <div class="feature-text">
+                <h4>Early Warning Alerts</h4>
+                <p>
+                    Receive important health alerts for your livestock.
+                </p>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">👨‍🌾</div>
+
+            <div class="feature-text">
+                <h4>Farmer-Centered Platform</h4>
+                <p>
+                    Simple digital tools for smarter livestock care.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         RIGHT PANEL
+    ========================== -->
+
+    <div class="right-panel">
+
+        <h1 class="form-title">
+            Create Farmer Account
+        </h1>
+
+        <p class="form-subtitle">
+            Join Livestock 360° and start managing your livestock health.
+        </p>
+
+
+        <!-- GENERAL FORM ERRORS -->
+
+        {% if form.non_field_errors %}
+            <div class="general-error">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+
+        <!-- REGISTRATION FORM -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label for="{{ form.username.id_for_label }}">
+                    👤 Username
+                </label>
+
+                {{ form.username }}
+
+                {% for error in form.username.errors %}
+                    <div class="error">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="{{ form.email.id_for_label }}">
+                    ✉️ Email Address
+                </label>
+
+                {{ form.email }}
+
+                {% for error in form.email.errors %}
+                    <div class="error">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="{{ form.password1.id_for_label }}">
+                    🔒 Password
+                </label>
+
+                {{ form.password1 }}
+
+                {% for error in form.password1.errors %}
+                    <div class="error">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="{{ form.password2.id_for_label }}">
+                    🔐 Confirm Password
+                </label>
+
+                {{ form.password2 }}
+
+                {% for error in form.password2.errors %}
+                    <div class="error">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- CREATE ACCOUNT -->
+
+            <button type="submit" class="register-btn">
+                Create Farmer Account →
+            </button>
+
+        </form>
+
+
+        <!-- FARMER LOGIN -->
+
+        <div class="login-text">
+
+            Already have an account?
+
+            <a href="{% url 'farmer_login' %}">
+                Farmer Login
+            </a>
+
+        </div>
+
+
+        <!-- SECURITY MESSAGE -->
+
+        <div class="security">
+            🔒 Your account information is securely stored.
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

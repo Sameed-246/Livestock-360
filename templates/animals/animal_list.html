@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Animals | Livestock 360°</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+            color: #1f2937;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: #16803c;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .language {
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* MAIN */
+
+        .container {
+            width: min(1100px, 94%);
+            margin: auto;
+            padding: 25px 0 50px;
+        }
+
+        /* HERO */
+
+        .hero {
+            background: white;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .hero h1 {
+            color: #14532d;
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .hero p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .top-actions {
+            margin-top: 18px;
+        }
+
+        .add-btn {
+            display: inline-block;
+            background: #16803c;
+            color: white;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 11px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #126b32;
+        }
+
+        /* ANIMAL GRID */
+
+        .animals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        /* CARD */
+
+        .animal-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5eee7;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .animal-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.09);
+        }
+
+        .animal-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 17px;
+        }
+
+        .animal-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            background: #e9f7ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 29px;
+        }
+
+        .animal-id {
+            font-size: 13px;
+            font-weight: 800;
+            color: #16803c;
+            background: #effaf2;
+            padding: 7px 10px;
+            border-radius: 8px;
+        }
+
+        /* DETAILS */
+
+        .details {
+            display: grid;
+            gap: 11px;
+            margin-bottom: 18px;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #eef2f0;
+            padding-bottom: 8px;
+        }
+
+        .label {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .value {
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .vaccinated {
+            color: #15803d;
+        }
+
+        .not-vaccinated {
+            color: #dc2626;
+        }
+
+        /* BUTTONS */
+
+        .view-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            background: #e9f7ed;
+            color: #16803c;
+            border: 1px solid #ccebd5;
+            padding: 11px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            transition: 0.2s;
+        }
+
+        .view-btn:hover {
+            background: #d9f1df;
+        }
+
+        .delete-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            background: #fff1f2;
+            color: #dc2626;
+            border: 1px solid #fecdd3;
+            padding: 10px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #ffe4e6;
+        }
+
+        /* EMPTY STATE */
+
+        .empty {
+            background: white;
+            border-radius: 18px;
+            padding: 45px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 12px;
+        }
+
+        .empty h2 {
+            color: #14532d;
+            margin-bottom: 8px;
+        }
+
+        .empty p {
+            color: #64748b;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 850px) {
+
+            .animals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 13px 15px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .back {
+                display: none;
+            }
+
+            .header-right {
+                gap: 5px;
+            }
+
+            .container {
+                width: 92%;
+                padding-top: 18px;
+            }
+
+            .hero {
+                padding: 19px;
+            }
+
+            .hero h1 {
+                font-size: 23px;
+            }
+
+            .animals-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .animal-card {
+                padding: 17px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="logo">
+        🐄 Livestock 360°
+    </div>
+
+    <div class="header-right">
+
+        <a
+            href="{% url 'farmer_dashboard' %}"
+            class="back"
+            id="dashboardLink"
+        >
+            ← Dashboard
+        </a>
+
+        <select
+            id="languageSelector"
+            class="language"
+        >
+
+            <option value="en">
+                English
+            </option>
+
+            <option value="te">
+                తెలుగు
+            </option>
+
+            <option value="hi">
+                हिंदी
+            </option>
+
+            <option value="ta">
+                தமிழ்
+            </option>
+
+            <option value="kn">
+                ಕನ್ನಡ
+            </option>
+
+        </select>
+
+    </div>
+
+</header>
+
+
+
+<!-- MAIN -->
+
+<main class="container">
+
+
+    <!-- PAGE INTRO -->
+
+    <section class="hero">
+
+        <h1 id="pageTitle">
+            My Animals
+        </h1>
+
+        <p id="pageDescription">
+            View and manage all animals registered under your account.
+        </p>
+
+        <div class="top-actions">
+
+            <a
+                href="{% url 'add_animal' %}"
+                class="add-btn"
+                id="addButton"
+            >
+                + Add New Animal
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ANIMALS -->
+
+    {% if animals %}
+
+        <section class="animals-grid">
+
+
+            {% for animal in animals %}
+
+                <article class="animal-card">
+
+
+                    <!-- TOP -->
+
+                    <div class="animal-top">
+
+                        <div class="animal-icon">
+
+                            {% if animal.animal_type == 'Cattle' %}
+
+                                🐄
+
+                            {% elif animal.animal_type == 'Buffalo' %}
+
+                                🐃
+
+                            {% elif animal.animal_type == 'Goat' %}
+
+                                🐐
+
+                            {% elif animal.animal_type == 'Sheep' %}
+
+                                🐑
+
+                            {% else %}
+
+                                🐾
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="animal-id">
+
+                            {{ animal.animal_id }}
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DETAILS -->
+
+                    <div class="details">
+
+
+                        <div class="detail">
+
+                            <span class="label">
+                                Animal Type
+                            </span>
+
+                            <span class="value">
+                                {{ animal.animal_type }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <span class="label">
+                                Breed
+                            </span>
+
+                            <span class="value">
+                                {{ animal.breed }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <span class="label">
+                                Age
+                            </span>
+
+                            <span class="value">
+                                {{ animal.age }} years
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <span class="label">
+                                Gender
+                            </span>
+
+                            <span class="value">
+                                {{ animal.gender }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <span class="label">
+                                Vaccination
+                            </span>
+
+
+                            {% if animal.vaccination_status %}
+
+                                <span class="value vaccinated">
+                                    ✓ Vaccinated
+                                </span>
+
+                            {% else %}
+
+                                <span class="value not-vaccinated">
+                                    ⚠ Not Vaccinated
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ACTIONS -->
+
+                    <a
+                        href="{% url 'animal_detail' animal.id %}"
+                        class="view-btn"
+                    >
+                        👁 View Animal
+                    </a>
+
+
+                    <a
+                        href="{% url 'delete_animal' animal.id %}"
+                        class="delete-btn"
+                    >
+                        🗑 Delete Animal
+                    </a>
+
+
+                </article>
+
+            {% endfor %}
+
+
+        </section>
+
+
+    {% else %}
+
+
+        <!-- EMPTY STATE -->
+
+        <section class="empty">
+
+            <div class="empty-icon">
+                🐄
+            </div>
+
+            <h2 id="emptyTitle">
+                No Animals Registered Yet
+            </h2>
+
+            <p id="emptyText">
+                Add your first animal to start tracking its health.
+            </p>
+
+            <a
+                href="{% url 'add_animal' %}"
+                class="add-btn"
+                id="emptyButton"
+            >
+                + Register First Animal
+            </a>
+
+        </section>
+
+
+    {% endif %}
+
+
+</main>
+
+
+
+<!-- LANGUAGE SYSTEM -->
+
+<script>
+
+const translations = {
+
+    en: {
+
+        pageTitle:
+            "My Animals",
+
+        pageDescription:
+            "View and manage all animals registered under your account.",
+
+        addButton:
+            "+ Add New Animal",
+
+        emptyTitle:
+            "No Animals Registered Yet",
+
+        emptyText:
+            "Add your first animal to start tracking its health.",
+
+        emptyButton:
+            "+ Register First Animal"
+
+    },
+
+
+    te: {
+
+        pageTitle:
+            "నా జంతువులు",
+
+        pageDescription:
+            "మీ ఖాతాలో నమోదు చేసిన అన్ని జంతువులను చూడండి మరియు నిర్వహించండి.",
+
+        addButton:
+            "+ కొత్త జంతువును జోడించండి",
+
+        emptyTitle:
+            "ఇంకా జంతువులు నమోదు కాలేదు",
+
+        emptyText:
+            "మీ మొదటి జంతువును జోడించి ఆరోగ్యాన్ని పర్యవేక్షించండి.",
+
+        emptyButton:
+            "+ మొదటి జంతువును నమోదు చేయండి"
+
+    },
+
+
+    hi: {
+
+        pageTitle:
+            "मेरे पशु",
+
+        pageDescription:
+            "अपने खाते में पंजीकृत सभी पशुओं को देखें और प्रबंधित करें।",
+
+        addButton:
+            "+ नया पशु जोड़ें",
+
+        emptyTitle:
+            "अभी कोई पशु पंजीकृत नहीं है",
+
+        emptyText:
+            "अपने पशु का स्वास्थ्य देखने के लिए पहला पशु जोड़ें।",
+
+        emptyButton:
+            "+ पहला पशु पंजीकृत करें"
+
+    },
+
+
+    ta: {
+
+        pageTitle:
+            "எனது கால்நடைகள்",
+
+        pageDescription:
+            "உங்கள் கணக்கில் பதிவு செய்யப்பட்ட அனைத்து கால்நடைகளையும் பார்க்கவும்.",
+
+        addButton:
+            "+ புதிய கால்நடையை சேர்க்கவும்",
+
+        emptyTitle:
+            "இன்னும் கால்நடைகள் பதிவு செய்யப்படவில்லை",
+
+        emptyText:
+            "உங்கள் முதல் கால்நடையை சேர்த்து அதன் ஆரோக்கியத்தை கண்காணிக்கவும்.",
+
+        emptyButton:
+            "+ முதல் கால்நடையை பதிவு செய்யவும்"
+
+    },
+
+
+    kn: {
+
+        pageTitle:
+            "ನನ್ನ ಜಾನುವಾರುಗಳು",
+
+        pageDescription:
+            "ನಿಮ್ಮ ಖಾತೆಯಲ್ಲಿ ನೋಂದಾಯಿಸಿರುವ ಎಲ್ಲಾ ಜಾನುವಾರುಗಳನ್ನು ವೀಕ್ಷಿಸಿ ಮತ್ತು ನಿರ್ವಹಿಸಿ.",
+
+        addButton:
+            "+ ಹೊಸ ಜಾನುವಾರು ಸೇರಿಸಿ",
+
+        emptyTitle:
+            "ಇನ್ನೂ ಯಾವುದೇ ಜಾನುವಾರು ನೋಂದಾಯಿಸಿಲ್ಲ",
+
+        emptyText:
+            "ಆರೋಗ್ಯವನ್ನು ಗಮನಿಸಲು ನಿಮ್ಮ ಮೊದಲ ಜಾನುವಾರನ್ನು ಸೇರಿಸಿ.",
+
+        emptyButton:
+            "+ ಮೊದಲ ಜಾನುವಾರನ್ನು ನೋಂದಾಯಿಸಿ"
+
+    }
+
+};
+
+
+
+function changeLanguage(language) {
+
+    const t = translations[language];
+
+    if (!t) {
+        return;
+    }
+
+
+    document.getElementById(
+        "pageTitle"
+    ).textContent = t.pageTitle;
+
+
+    document.getElementById(
+        "pageDescription"
+    ).textContent = t.pageDescription;
+
+
+    document.getElementById(
+        "addButton"
+    ).textContent = t.addButton;
+
+
+    const emptyTitle =
+        document.getElementById("emptyTitle");
+
+    if (emptyTitle) {
+
+        emptyTitle.textContent =
+            t.emptyTitle;
+
+    }
+
+
+    const emptyText =
+        document.getElementById("emptyText");
+
+    if (emptyText) {
+
+        emptyText.textContent =
+            t.emptyText;
+
+    }
+
+
+    const emptyButton =
+        document.getElementById("emptyButton");
+
+    if (emptyButton) {
+
+        emptyButton.textContent =
+            t.emptyButton;
+
+    }
+
+
+    localStorage.setItem(
+        "livestock_language",
+        language
+    );
+
+}
+
+
+
+const selector =
+    document.getElementById(
+        "languageSelector"
+    );
+
+
+const savedLanguage =
+    localStorage.getItem(
+        "livestock_language"
+    ) || "en";
+
+
+selector.value =
+    savedLanguage;
+
+
+selector.addEventListener(
+    "change",
+    function () {
+
+        changeLanguage(
+            this.value
+        );
+
+    }
+);
+
+
+changeLanguage(
+    savedLanguage
+);
+
+</script>
+
+
+</body>
+
+</html>

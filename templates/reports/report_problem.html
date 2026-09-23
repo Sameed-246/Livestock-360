@@ -1,0 +1,2707 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Report Animal Health Problem | Livestock 360°</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f3f8f4;
+            color: #173b27;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            background:
+                linear-gradient(
+                    135deg,
+                    #176b3a,
+                    #239653
+                );
+
+            color: white;
+
+            padding:
+                18px 18px 20px;
+
+            border-radius:
+                0 0 24px 24px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0,0,0,0.12);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .tagline {
+            font-size: 12px;
+            margin-top: 4px;
+            opacity: 0.9;
+        }
+
+        .language {
+            padding: 9px 10px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            background: white;
+            color: #176b3a;
+            font-weight: bold;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 20px 15px 40px;
+        }
+
+        .page-title {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .page-description {
+            color: #61756a;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 22px;
+        }
+
+        /* =========================
+           STEP CARDS
+        ========================= */
+
+        .step {
+            background: white;
+            padding: 18px;
+            margin-bottom: 16px;
+            border-radius: 18px;
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,0.06);
+        }
+
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 17px;
+            margin-bottom: 14px;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            border-radius: 50%;
+            background: #e5f4e9;
+            color: #176b3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* =========================
+           FORM CONTROLS
+        ========================= */
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d5e3d9;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            background: #fbfdfb;
+        }
+
+        .form-control:focus {
+            border-color: #239653;
+            box-shadow:
+                0 0 0 3px
+                rgba(35,150,83,0.1);
+        }
+
+        select.form-control {
+            min-height: 50px;
+            cursor: pointer;
+        }
+
+        /* =========================
+           ANIMAL EMPTY STATE
+        ========================= */
+
+        .animal-help {
+            margin-top: 9px;
+            font-size: 13px;
+            color: #718078;
+            line-height: 1.4;
+        }
+
+        .no-animal-box {
+            background: #fff8e8;
+            border: 1px solid #f0d99b;
+            border-radius: 14px;
+            padding: 15px;
+            margin-top: 12px;
+            color: #765500;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .add-animal-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 11px 15px;
+            border-radius: 10px;
+            background: #176b3a;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* =========================
+           SYMPTOMS
+        ========================= */
+
+        .symptom-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .symptom-card {
+            border:
+                2px solid #e4eee7;
+
+            border-radius: 15px;
+
+            padding:
+                15px 8px;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            background: #fbfdfb;
+
+            transition: 0.2s;
+        }
+
+        .symptom-card:hover {
+            border-color: #239653;
+        }
+
+        .symptom-card.selected {
+            border-color: #239653;
+            background: #e9f7ed;
+        }
+
+        .symptom-icon {
+            font-size: 30px;
+            display: block;
+            margin-bottom: 7px;
+        }
+
+        .symptom-text {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           TEMPERATURE
+        ========================= */
+
+        .temperature-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .temperature-row input {
+            flex: 1;
+        }
+
+        .temperature-unit {
+            background: #e8f5e8;
+            padding: 13px;
+            border-radius: 12px;
+            font-weight: bold;
+            color: #176b3a;
+        }
+
+        /* =========================
+           IMAGE
+        ========================= */
+
+        .upload-box {
+            border:
+                2px dashed #bcd7c4;
+
+            border-radius: 15px;
+
+            padding:
+                22px 15px;
+
+            text-align: center;
+
+            background: #f9fcfa;
+        }
+
+        .upload-icon {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .upload-text {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .upload-help {
+            font-size: 12px;
+            color: #718078;
+            margin-bottom: 14px;
+        }
+
+        .upload-box input {
+            width: 100%;
+        }
+
+        /* =========================
+           LOCATION
+        ========================= */
+
+        .location {
+            padding: 14px;
+            border-radius: 13px;
+            background: #f0f8f2;
+            color: #176b3a;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 50px;
+        }
+
+        .location.success {
+            background: #e8f7ec;
+            border: 1px solid #b8dfc2;
+        }
+
+        .location.error {
+            background: #fff1f1;
+            border: 1px solid #efc2c2;
+            color: #a32020;
+        }
+
+        .location-button {
+            width: 100%;
+            margin-top: 12px;
+            padding: 14px;
+            border: none;
+            border-radius: 13px;
+            background: #e8f5e8;
+            color: #176b3a;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .location-button:hover {
+            background: #d9efdf;
+        }
+
+        .location-button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .location-help {
+            margin-top: 9px;
+            font-size: 12px;
+            color: #718078;
+            line-height: 1.4;
+        }
+
+        /* =========================
+           MAP
+        ========================= */
+
+        #map {
+            width: 100%;
+            height: 220px;
+            margin-top: 14px;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        /* =========================
+           SUBMIT
+        ========================= */
+
+        .submit-button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #176b3a,
+                    #239653
+                );
+
+            color: white;
+
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+
+            box-shadow:
+                0 5px 15px
+                rgba(23,107,58,0.2);
+        }
+
+        .submit-button:hover {
+            opacity: 0.92;
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #176b3a;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* =========================
+           ERRORS
+        ========================= */
+
+        .errorlist {
+            color: #c62828;
+            font-size: 13px;
+            padding-left: 18px;
+            margin-top: 7px;
+        }
+
+        .required-note {
+            font-size: 12px;
+            color: #718078;
+            margin-top: 7px;
+        }
+
+        /* =========================
+           LOCATION STATUS BOX
+        ========================= */
+
+        .location-check {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            background: #f7faf8;
+            color: #61756a;
+        }
+
+        .location-check.visible {
+            display: block;
+        }
+
+        /* =========================
+           DESKTOP
+        ========================= */
+
+        @media (min-width: 700px) {
+
+            .container {
+                padding-top: 30px;
+            }
+
+            .page-title {
+                font-size: 30px;
+            }
+
+        }
+
+        /* =========================
+           SMALL MOBILE
+        ========================= */
+
+        @media (max-width: 400px) {
+
+            .header-top {
+                align-items: flex-start;
+            }
+
+            .brand {
+                font-size: 19px;
+            }
+
+            .language {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .symptom-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div class="header-top">
+
+        <div>
+
+            <div class="brand">
+                🐄 Livestock 360°
+            </div>
+
+            <div class="tagline">
+                AI-powered livestock health monitoring
+            </div>
+
+        </div>
+
+
+        <select
+            id="language"
+            class="language"
+            onchange="changeLanguage()"
+        >
+
+            <option value="English">
+                English
+            </option>
+
+            <option value="Telugu">
+                తెలుగు
+            </option>
+
+            <option value="Hindi">
+                हिंदी
+            </option>
+
+            <option value="Tamil">
+                தமிழ்
+            </option>
+
+            <option value="Kannada">
+                ಕನ್ನಡ
+            </option>
+
+        </select>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="container">
+
+
+    <div
+        class="page-title"
+        id="pageTitle"
+    >
+        🩺 Report Animal Health Problem
+    </div>
+
+
+    <div
+        class="page-description"
+        id="pageDescription"
+    >
+        Tell us about your animal's health.
+        This will help our system identify
+        possible health risks.
+    </div>
+
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        id="reportForm"
+    >
+
+        {% csrf_token %}
+
+
+        <!-- =================================================
+             DJANGO NON FIELD ERRORS
+        ================================================== -->
+
+        {% if form.non_field_errors %}
+
+            <div class="step">
+
+                {{ form.non_field_errors }}
+
+            </div>
+
+        {% endif %}
+
+
+
+        <!-- =================================================
+             STEP 1 — ANIMAL
+        ================================================== -->
+
+        <div class="step">
+
+            <div class="step-title">
+
+                <span class="step-number">
+                    1
+                </span>
+
+                <span id="animalLabel">
+                    Select Animal
+                </span>
+
+            </div>
+
+
+            {{ form.animal }}
+
+
+            {% if form.animal.errors %}
+
+                {{ form.animal.errors }}
+
+            {% endif %}
+
+
+            {% if form.animal.field.queryset.count == 0 %}
+
+                <div
+                    class="no-animal-box"
+                    id="noAnimalBox"
+                >
+
+                    🐄 You have not added any animals yet.
+
+                    <br>
+
+                    Please add an animal before
+                    submitting a health report.
+
+                    <br>
+
+                    <a
+                        href="{% url 'add_animal' %}"
+                        class="add-animal-button"
+                        id="addAnimalButton"
+                    >
+                        ➕ Add New Animal
+                    </a>
+
+                </div>
+
+            {% else %}
+
+                <div
+                    class="animal-help"
+                    id="animalHelp"
+                >
+                    Select the animal that has a health problem.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- =================================================
+             STEP 2 — SYMPTOMS
+        ================================================== -->
+
+        <div class="step">
+
+            <div class="step-title">
+
+                <span class="step-number">
+                    2
+                </span>
+
+                <span id="symptomsLabel">
+                    What symptoms do you see?
+                </span>
+
+            </div>
+
+
+            <div class="symptom-grid">
+
+
+                <div
+                    class="symptom-card"
+                    onclick="selectSymptom(this, 'Fever')"
+                >
+
+                    <span class="symptom-icon">
+                        🌡️
+                    </span>
+
+                    <span
+                        class="symptom-text"
+                        data-en="Fever"
+                        data-te="జ్వరం"
+                        data-hi="बुखार"
+                        data-ta="காய்ச்சல்"
+                        data-kn="ಜ್ವರ"
+                    >
+                        Fever
+                    </span>
+
+                </div>
+
+
+
+                <div
+                    class="symptom-card"
+                    onclick="selectSymptom(this, 'Not eating')"
+                >
+
+                    <span class="symptom-icon">
+                        🍽️
+                    </span>
+
+                    <span
+                        class="symptom-text"
+                        data-en="Not eating"
+                        data-te="మేత తినడం లేదు"
+                        data-hi="खाना नहीं खा रहा"
+                        data-ta="சாப்பிடவில்லை"
+                        data-kn="ತಿನ್ನುತ್ತಿಲ್ಲ"
+                    >
+                        Not eating
+                    </span>
+
+                </div>
+
+
+
+                <div
+                    class="symptom-card"
+                    onclick="selectSymptom(this, 'Coughing')"
+                >
+
+                    <span class="symptom-icon">
+                        😷
+                    </span>
+
+                    <span
+                        class="symptom-text"
+                        data-en="Coughing"
+                        data-te="దగ్గు"
+                        data-hi="खांसी"
+                        data-ta="இருமல்"
+                        data-kn="ಕೆಮ್ಮು"
+                    >
+                        Coughing
+                    </span>
+
+                </div>
+
+
+
+                <div
+                    class="symptom-card"
+                    onclick="selectSymptom(this, 'Weakness')"
+                >
+
+                    <span class="symptom-icon">
+                        🐄
+                    </span>
+
+                    <span
+                        class="symptom-text"
+                        data-en="Weakness"
+                        data-te="బలహీనత"
+                        data-hi="कमजोरी"
+                        data-ta="பலவீனம்"
+                        data-kn="ದೌರ್ಬಲ್ಯ"
+                    >
+                        Weakness
+                    </span>
+
+                </div>
+
+
+
+                <div
+                    class="symptom-card"
+                    onclick="selectSymptom(this, 'Diarrhea')"
+                >
+
+                    <span class="symptom-icon">
+                        💧
+                    </span>
+
+                    <span
+                        class="symptom-text"
+                        data-en="Diarrhea"
+                        data-te="విరేచనాలు"
+                        data-hi="दस्त"
+                        data-ta="வயிற்றுப்போக்கு"
+                        data-kn="ಅತಿಸಾರ"
+                    >
+                        Diarrhea
+                    </span>
+
+                </div>
+
+
+
+                <div
+                    class="symptom-card"
+                    onclick="selectSymptom(this, 'Nasal discharge')"
+                >
+
+                    <span class="symptom-icon">
+                        🤧
+                    </span>
+
+                    <span
+                        class="symptom-text"
+                        data-en="Nasal discharge"
+                        data-te="ముక్కు కారడం"
+                        data-hi="नाक बहना"
+                        data-ta="மூக்கு ஒழுகுதல்"
+                        data-kn="ಮೂಗು ಸೋರುವುದು"
+                    >
+                        Nasal discharge
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <div style="margin-top:15px;">
+
+                {{ form.symptoms }}
+
+            </div>
+
+
+            {% if form.symptoms.errors %}
+
+                {{ form.symptoms.errors }}
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- =================================================
+             STEP 3 — TEMPERATURE
+        ================================================== -->
+
+        <div class="step">
+
+            <div class="step-title">
+
+                <span class="step-number">
+                    3
+                </span>
+
+                <span id="temperatureLabel">
+                    Animal Temperature
+                </span>
+
+            </div>
+
+
+            <div class="temperature-row">
+
+                {{ form.temperature }}
+
+                <span class="temperature-unit">
+                    °F
+                </span>
+
+            </div>
+
+
+            {% if form.temperature.errors %}
+
+                {{ form.temperature.errors }}
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- =================================================
+             STEP 4 — PHOTO
+        ================================================== -->
+
+        <div class="step">
+
+            <div class="step-title">
+
+                <span class="step-number">
+                    4
+                </span>
+
+                <span id="photoLabel">
+                    Animal Photo
+                </span>
+
+            </div>
+
+
+            <div class="upload-box">
+
+                <div class="upload-icon">
+                    📷
+                </div>
+
+
+                <div
+                    class="upload-text"
+                    id="photoText"
+                >
+                    Take a photo of the animal
+                </div>
+
+
+                <div
+                    class="upload-help"
+                    id="photoHelp"
+                >
+                    A clear photo can help with
+                    health assessment.
+                </div>
+
+
+                {{ form.image }}
+
+            </div>
+
+
+            {% if form.image.errors %}
+
+                {{ form.image.errors }}
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- =================================================
+             STEP 5 — LOCATION
+        ================================================== -->
+
+        <div class="step">
+
+            <div class="step-title">
+
+                <span class="step-number">
+                    5
+                </span>
+
+                <span id="locationLabel">
+                    Your Location
+                </span>
+
+            </div>
+
+
+            <div
+                class="location"
+                id="locationStatus"
+            >
+                📍 Finding your location...
+            </div>
+
+
+            <button
+                type="button"
+                onclick="getLocation()"
+                class="location-button"
+                id="locationButton"
+            >
+                📍 Use My Current Location
+            </button>
+
+
+            <div
+                class="location-help"
+                id="locationHelp"
+            >
+                Your exact coordinates are used internally
+                for disease surveillance. You will see
+                a readable location instead.
+            </div>
+
+
+            <div
+                class="location-check"
+                id="locationCheck"
+            >
+                Location data will be included with this report.
+            </div>
+
+
+            <!-- Hidden Django location fields -->
+
+            {{ form.latitude }}
+
+            {{ form.longitude }}
+
+            {{ form.location_address }}
+
+
+            <div id="map"></div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SUBMIT
+        ================================================== -->
+
+        <div class="step">
+
+            <button
+                type="submit"
+                class="submit-button"
+                id="submitButton"
+                disabled
+            >
+                📍 Getting Location...
+            </button>
+
+
+            <a
+                href="{% url 'farmer_dashboard' %}"
+                class="back-button"
+                id="backButton"
+            >
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+
+    </form>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     LEAFLET JS
+===================================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+
+<script>
+
+/* =====================================================
+   GLOBAL LOCATION VARIABLES
+===================================================== */
+
+let map = null;
+
+let locationMarker = null;
+
+let locationCaptured = false;
+
+let addressCaptured = false;
+
+let locationRequestInProgress = false;
+
+
+/* =====================================================
+   HELPER — GET DJANGO LOCATION FIELDS
+===================================================== */
+
+function getLocationFields() {
+
+    return {
+        latitude:
+            document.getElementById("id_latitude"),
+
+        longitude:
+            document.getElementById("id_longitude"),
+
+        address:
+            document.getElementById("id_location_address")
+    };
+
+}
+
+
+/* =====================================================
+   UPDATE SUBMIT BUTTON
+===================================================== */
+
+function updateSubmitButton() {
+
+    const submitButton =
+        document.getElementById(
+            "submitButton"
+        );
+
+    if (!submitButton) {
+        return;
+    }
+
+
+    if (locationCaptured) {
+
+        submitButton.disabled = false;
+
+        submitButton.textContent =
+            "🚨 Submit Health Report";
+
+    }
+
+    else {
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+            "📍 Getting Location...";
+
+    }
+
+}
+
+
+/* =====================================================
+   SYMPTOM SELECTION
+===================================================== */
+
+function selectSymptom(
+    element,
+    symptom
+) {
+
+    const symptomsField =
+        document.getElementById(
+            "id_symptoms"
+        );
+
+
+    if (!symptomsField) {
+        return;
+    }
+
+
+    element.classList.toggle(
+        "selected"
+    );
+
+
+    let currentSymptoms =
+        symptomsField.value
+            .split(",")
+            .map(
+                item => item.trim()
+            )
+            .filter(
+                item => item !== ""
+            );
+
+
+    if (
+        currentSymptoms.includes(symptom)
+    ) {
+
+        currentSymptoms =
+            currentSymptoms.filter(
+                item =>
+                    item !== symptom
+            );
+
+    }
+
+    else {
+
+        currentSymptoms.push(
+            symptom
+        );
+
+    }
+
+
+    symptomsField.value =
+        currentSymptoms.join(", ");
+
+}
+
+
+/* =====================================================
+   INITIALIZE MAP
+===================================================== */
+
+function initializeMap() {
+
+    const mapElement =
+        document.getElementById(
+            "map"
+        );
+
+
+    if (!mapElement) {
+        return;
+    }
+
+
+    map =
+        L.map("map").setView(
+            [
+                20.5937,
+                78.9629
+            ],
+            5
+        );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+}
+
+
+/* =====================================================
+   SHOW LOCATION ON MAP
+===================================================== */
+
+function showLocationOnMap(
+    latitude,
+    longitude
+) {
+
+    if (!map) {
+        return;
+    }
+
+
+    map.setView(
+        [
+            latitude,
+            longitude
+        ],
+        16
+    );
+
+
+    if (locationMarker) {
+
+        map.removeLayer(
+            locationMarker
+        );
+
+    }
+
+
+    locationMarker =
+        L.marker(
+            [
+                latitude,
+                longitude
+            ]
+        )
+        .addTo(map);
+
+
+    locationMarker
+        .bindPopup(
+            "📍 Your current location"
+        )
+        .openPopup();
+
+}
+
+
+/* =====================================================
+   GET CURRENT LOCATION
+===================================================== */
+
+function getLocation() {
+
+    const status =
+        document.getElementById(
+            "locationStatus"
+        );
+
+    const button =
+        document.getElementById(
+            "locationButton"
+        );
+
+    const check =
+        document.getElementById(
+            "locationCheck"
+        );
+
+
+    const fields =
+        getLocationFields();
+
+
+    locationCaptured = false;
+
+    addressCaptured = false;
+
+
+    updateSubmitButton();
+
+
+    if (check) {
+
+        check.classList.remove(
+            "visible"
+        );
+
+    }
+
+
+    if (status) {
+
+        status.classList.remove(
+            "success",
+            "error"
+        );
+
+        status.textContent =
+            "📍 Finding your location...";
+
+    }
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "📍 Getting Location...";
+
+    }
+
+
+    locationRequestInProgress = true;
+
+
+    if (!navigator.geolocation) {
+
+        if (status) {
+
+            status.classList.add(
+                "error"
+            );
+
+            status.textContent =
+                "❌ Location is not supported on this device.";
+
+        }
+
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "📍 Try Location Again";
+
+        }
+
+
+        locationRequestInProgress = false;
+
+        return;
+
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+
+            console.log(
+                "GPS latitude:",
+                latitude
+            );
+
+            console.log(
+                "GPS longitude:",
+                longitude
+            );
+
+
+            /* =========================================
+               SAVE GPS IMMEDIATELY
+            ========================================= */
+
+            if (fields.latitude) {
+
+                fields.latitude.value =
+                    String(latitude);
+
+            }
+
+
+            if (fields.longitude) {
+
+                fields.longitude.value =
+                    String(longitude);
+
+            }
+
+
+            /*
+             * Mark location captured immediately.
+             * Address lookup happens separately.
+             */
+
+            locationCaptured = true;
+
+            locationRequestInProgress = false;
+
+
+            console.log(
+                "Saved hidden latitude field:",
+                fields.latitude
+                    ? fields.latitude.value
+                    : "FIELD NOT FOUND"
+            );
+
+            console.log(
+                "Saved hidden longitude field:",
+                fields.longitude
+                    ? fields.longitude.value
+                    : "FIELD NOT FOUND"
+            );
+
+
+            /* =========================================
+               UPDATE MAP
+            ========================================= */
+
+            showLocationOnMap(
+                latitude,
+                longitude
+            );
+
+
+            /* =========================================
+               UPDATE UI
+            ========================================= */
+
+            if (status) {
+
+                status.classList.remove(
+                    "error"
+                );
+
+                status.classList.add(
+                    "success"
+                );
+
+                status.textContent =
+                    "📍 Location captured. Finding readable address...";
+
+            }
+
+
+            if (button) {
+
+                button.textContent =
+                    "📍 Finding Address...";
+
+            }
+
+
+            /*
+             * Enable submission because the
+             * critical GPS coordinates are already
+             * stored in the form.
+             */
+
+            updateSubmitButton();
+
+
+            /*
+             * Continue with readable address lookup.
+             */
+
+            getLocationName(
+                latitude,
+                longitude
+            );
+
+        },
+
+
+        function(error) {
+
+            console.error(
+                "Geolocation error:",
+                error
+            );
+
+
+            locationCaptured = false;
+
+            locationRequestInProgress = false;
+
+
+            updateSubmitButton();
+
+
+            if (button) {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "📍 Try Location Again";
+
+            }
+
+
+            if (!status) {
+                return;
+            }
+
+
+            status.classList.remove(
+                "success"
+            );
+
+            status.classList.add(
+                "error"
+            );
+
+
+            if (
+                error.code ===
+                error.PERMISSION_DENIED
+            ) {
+
+                status.textContent =
+                    "❌ Location permission denied. Please allow location access and try again.";
+
+            }
+
+            else if (
+                error.code ===
+                error.POSITION_UNAVAILABLE
+            ) {
+
+                status.textContent =
+                    "❌ Your location is currently unavailable. Please try again.";
+
+            }
+
+            else if (
+                error.code ===
+                error.TIMEOUT
+            ) {
+
+                status.textContent =
+                    "❌ Location request timed out. Please try again.";
+
+            }
+
+            else {
+
+                status.textContent =
+                    "❌ Unable to get your location. Please try again.";
+
+            }
+
+        },
+
+
+        {
+            enableHighAccuracy: true,
+
+            timeout: 15000,
+
+            maximumAge: 0
+        }
+
+    );
+
+}
+
+
+/* =====================================================
+   GPS → READABLE ADDRESS
+===================================================== */
+
+async function getLocationName(
+    latitude,
+    longitude
+) {
+
+    const status =
+        document.getElementById(
+            "locationStatus"
+        );
+
+    const button =
+        document.getElementById(
+            "locationButton"
+        );
+
+    const fields =
+        getLocationFields();
+
+
+    try {
+
+        if (status) {
+
+            status.textContent =
+                "📍 Finding your address...";
+
+        }
+
+
+        /*
+         * Reverse geocoding through Nominatim.
+         */
+
+        const response =
+            await fetch(
+                "https://nominatim.openstreetmap.org/reverse" +
+                "?format=jsonv2" +
+                "&lat=" +
+                encodeURIComponent(latitude) +
+                "&lon=" +
+                encodeURIComponent(longitude) +
+                "&zoom=18" +
+                "&addressdetails=1"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to find address"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Nominatim response:",
+            data
+        );
+
+
+        let readableAddress = "";
+
+
+        if (data.address) {
+
+            const address =
+                data.address;
+
+            const parts = [];
+
+
+            /*
+             * Village
+             */
+
+            if (address.village) {
+
+                parts.push(
+                    address.village
+                );
+
+            }
+
+            else if (address.town) {
+
+                parts.push(
+                    address.town
+                );
+
+            }
+
+            else if (address.city) {
+
+                parts.push(
+                    address.city
+                );
+
+            }
+
+            else if (address.municipality) {
+
+                parts.push(
+                    address.municipality
+                );
+
+            }
+
+
+            /*
+             * District
+             */
+
+            if (address.district) {
+
+                parts.push(
+                    address.district
+                );
+
+            }
+
+            else if (address.county) {
+
+                parts.push(
+                    address.county
+                );
+
+            }
+
+
+            /*
+             * State
+             */
+
+            if (address.state) {
+
+                parts.push(
+                    address.state
+                );
+
+            }
+
+
+            /*
+             * Country
+             */
+
+            if (address.country) {
+
+                parts.push(
+                    address.country
+                );
+
+            }
+
+
+            readableAddress =
+                parts.join(", ");
+
+        }
+
+
+        /*
+         * If structured address was empty,
+         * use Nominatim's display_name.
+         */
+
+        if (
+            !readableAddress &&
+            data.display_name
+        ) {
+
+            readableAddress =
+                data.display_name;
+
+        }
+
+
+        /*
+         * SAVE READABLE ADDRESS
+         */
+
+        if (fields.address) {
+
+            fields.address.value =
+                readableAddress;
+
+        }
+
+
+        addressCaptured =
+            readableAddress.length > 0;
+
+
+        console.log(
+            "Saved location address:",
+            fields.address
+                ? fields.address.value
+                : "FIELD NOT FOUND"
+        );
+
+
+        /*
+         * UPDATE UI
+         */
+
+        if (status) {
+
+            status.classList.remove(
+                "error"
+            );
+
+            status.classList.add(
+                "success"
+            );
+
+            status.textContent =
+                "📍 " +
+                (
+                    readableAddress ||
+                    "Location captured"
+                );
+
+        }
+
+
+        if (button) {
+
+            button.textContent =
+                "✅ Location Captured";
+
+            button.disabled = false;
+
+        }
+
+
+        const check =
+            document.getElementById(
+                "locationCheck"
+            );
+
+
+        if (check) {
+
+            check.classList.add(
+                "visible"
+            );
+
+            check.textContent =
+                "✅ GPS location is ready and will be used for disease surveillance.";
+
+        }
+
+
+        updateSubmitButton();
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Address lookup error:",
+            error
+        );
+
+
+        /*
+         * IMPORTANT:
+         *
+         * GPS coordinates are still valid.
+         * We do NOT erase them just because
+         * address lookup failed.
+         */
+
+        addressCaptured = false;
+
+
+        if (fields.address) {
+
+            /*
+             * Keep an empty address instead of
+             * putting raw coordinates in the
+             * farmer-visible address field.
+             */
+
+            fields.address.value = "";
+
+        }
+
+
+        if (status) {
+
+            status.classList.remove(
+                "success"
+            );
+
+            status.classList.add(
+                "error"
+            );
+
+            status.textContent =
+                "⚠️ GPS location captured, but readable address could not be found. You can still submit.";
+
+        }
+
+
+        if (button) {
+
+            button.textContent =
+                "📍 Location Captured";
+
+            button.disabled = false;
+
+        }
+
+
+        const check =
+            document.getElementById(
+                "locationCheck"
+            );
+
+
+        if (check) {
+
+            check.classList.add(
+                "visible"
+            );
+
+            check.textContent =
+                "✅ GPS coordinates are ready for disease surveillance.";
+
+        }
+
+
+        updateSubmitButton();
+
+    }
+
+}
+
+
+/* =====================================================
+   LANGUAGE SYSTEM
+===================================================== */
+
+const translations = {
+
+    English: {
+
+        pageTitle:
+            "🩺 Report Animal Health Problem",
+
+        pageDescription:
+            "Tell us about your animal's health. This will help our system identify possible health risks.",
+
+        animalLabel:
+            "Select Animal",
+
+        animalHelp:
+            "Select the animal that has a health problem.",
+
+        noAnimal:
+            "🐄 You have not added any animals yet. Please add an animal before submitting a health report.",
+
+        addAnimal:
+            "➕ Add New Animal",
+
+        symptomsLabel:
+            "What symptoms do you see?",
+
+        temperatureLabel:
+            "Animal Temperature",
+
+        photoLabel:
+            "Animal Photo",
+
+        photoText:
+            "Take a photo of the animal",
+
+        photoHelp:
+            "A clear photo can help with health assessment.",
+
+        locationLabel:
+            "Your Location",
+
+        locationButton:
+            "📍 Use My Current Location",
+
+        submitButton:
+            "🚨 Submit Health Report",
+
+        backButton:
+            "← Back to Dashboard"
+
+    },
+
+
+    Telugu: {
+
+        pageTitle:
+            "🩺 జంతువు ఆరోగ్య సమస్యను నివేదించండి",
+
+        pageDescription:
+            "మీ జంతువు ఆరోగ్యం గురించి తెలియజేయండి. ఇది ఆరోగ్య ప్రమాదాలను గుర్తించడంలో సహాయపడుతుంది.",
+
+        animalLabel:
+            "జంతువును ఎంచుకోండి",
+
+        animalHelp:
+            "ఆరోగ్య సమస్య ఉన్న జంతువును ఎంచుకోండి.",
+
+        noAnimal:
+            "🐄 మీరు ఇంకా జంతువులను జోడించలేదు. ఆరోగ్య నివేదిక పంపడానికి ముందుగా జంతువును జోడించండి.",
+
+        addAnimal:
+            "➕ కొత్త జంతువును జోడించండి",
+
+        symptomsLabel:
+            "ఏ లక్షణాలు కనిపిస్తున్నాయి?",
+
+        temperatureLabel:
+            "జంతువు ఉష్ణోగ్రత",
+
+        photoLabel:
+            "జంతువు ఫోటో",
+
+        photoText:
+            "జంతువు ఫోటో తీయండి",
+
+        photoHelp:
+            "స్పష్టమైన ఫోటో ఆరోగ్య అంచనాకు సహాయపడుతుంది.",
+
+        locationLabel:
+            "మీ స్థానం",
+
+        locationButton:
+            "📍 నా ప్రస్తుత స్థానాన్ని ఉపయోగించండి",
+
+        submitButton:
+            "🚨 ఆరోగ్య నివేదికను పంపండి",
+
+        backButton:
+            "← డాష్‌బోర్డ్‌కు తిరిగి వెళ్ళండి"
+
+    },
+
+
+    Hindi: {
+
+        pageTitle:
+            "🩺 पशु की स्वास्थ्य समस्या रिपोर्ट करें",
+
+        pageDescription:
+            "अपने पशु के स्वास्थ्य के बारे में बताएं। इससे स्वास्थ्य जोखिमों की पहचान करने में मदद मिलेगी।",
+
+        animalLabel:
+            "पशु चुनें",
+
+        animalHelp:
+            "जिस पशु को स्वास्थ्य समस्या है उसे चुनें।",
+
+        noAnimal:
+            "🐄 आपने अभी तक कोई पशु नहीं जोड़ा है। स्वास्थ्य रिपोर्ट भेजने से पहले पशु जोड़ें।",
+
+        addAnimal:
+            "➕ नया पशु जोड़ें",
+
+        symptomsLabel:
+            "आपको कौन से लक्षण दिखाई दे रहे हैं?",
+
+        temperatureLabel:
+            "पशु का तापमान",
+
+        photoLabel:
+            "पशु की फोटो",
+
+        photoText:
+            "पशु की फोटो लें",
+
+        photoHelp:
+            "एक साफ फोटो स्वास्थ्य जांच में मदद कर सकती है।",
+
+        locationLabel:
+            "आपका स्थान",
+
+        locationButton:
+            "📍 मेरा वर्तमान स्थान उपयोग करें",
+
+        submitButton:
+            "🚨 स्वास्थ्य रिपोर्ट भेजें",
+
+        backButton:
+            "← डैशबोर्ड पर वापस जाएं"
+
+    },
+
+
+    Tamil: {
+
+        pageTitle:
+            "🩺 விலங்கின் உடல்நலப் பிரச்சினையை தெரிவிக்கவும்",
+
+        pageDescription:
+            "உங்கள் விலங்கின் உடல்நிலை பற்றி தெரிவிக்கவும். இது உடல்நல அபாயங்களை கண்டறிய உதவும்.",
+
+        animalLabel:
+            "விலங்கை தேர்வு செய்யவும்",
+
+        animalHelp:
+            "உடல்நலப் பிரச்சினை உள்ள விலங்கைத் தேர்வு செய்யவும்.",
+
+        noAnimal:
+            "🐄 நீங்கள் இன்னும் எந்த விலங்கையும் சேர்க்கவில்லை. அறிக்கையை அனுப்ப முதலில் ஒரு விலங்கைச் சேர்க்கவும்.",
+
+        addAnimal:
+            "➕ புதிய விலங்கைச் சேர்க்கவும்",
+
+        symptomsLabel:
+            "என்ன அறிகுறிகள் உள்ளன?",
+
+        temperatureLabel:
+            "விலங்கின் வெப்பநிலை",
+
+        photoLabel:
+            "விலங்கின் புகைப்படம்",
+
+        photoText:
+            "விலங்கின் புகைப்படத்தை எடுக்கவும்",
+
+        photoHelp:
+            "தெளிவான புகைப்படம் உடல்நல மதிப்பீட்டிற்கு உதவும்.",
+
+        locationLabel:
+            "உங்கள் இருப்பிடம்",
+
+        locationButton:
+            "📍 எனது தற்போதைய இருப்பிடத்தைப் பயன்படுத்தவும்",
+
+        submitButton:
+            "🚨 உடல்நல அறிக்கையை அனுப்பவும்",
+
+        backButton:
+            "← டாஷ்போர்டுக்கு திரும்பவும்"
+
+    },
+
+
+    Kannada: {
+
+        pageTitle:
+            "🩺 ಪ್ರಾಣಿಯ ಆರೋಗ್ಯ ಸಮಸ್ಯೆಯನ್ನು ವರದಿ ಮಾಡಿ",
+
+        pageDescription:
+            "ನಿಮ್ಮ ಪ್ರಾಣಿಯ ಆರೋಗ್ಯದ ಬಗ್ಗೆ ತಿಳಿಸಿ. ಇದು ಆರೋಗ್ಯದ ಅಪಾಯಗಳನ್ನು ಗುರುತಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.",
+
+        animalLabel:
+            "ಪ್ರಾಣಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+
+        animalHelp:
+            "ಆರೋಗ್ಯ ಸಮಸ್ಯೆ ಇರುವ ಪ್ರಾಣಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+
+        noAnimal:
+            "🐄 ನೀವು ಇನ್ನೂ ಯಾವುದೇ ಪ್ರಾಣಿಯನ್ನು ಸೇರಿಸಿಲ್ಲ. ವರದಿ ಸಲ್ಲಿಸುವ ಮೊದಲು ಪ್ರಾಣಿಯನ್ನು ಸೇರಿಸಿ.",
+
+        addAnimal:
+            "➕ ಹೊಸ ಪ್ರಾಣಿಯನ್ನು ಸೇರಿಸಿ",
+
+        symptomsLabel:
+            "ಯಾವ ಲಕ್ಷಣಗಳು ಕಾಣಿಸುತ್ತಿವೆ?",
+
+        temperatureLabel:
+            "ಪ್ರಾಣಿಯ ತಾಪಮಾನ",
+
+        photoLabel:
+            "ಪ್ರಾಣಿಯ ಫೋಟೋ",
+
+        photoText:
+            "ಪ್ರಾಣಿಯ ಫೋಟೋ ತೆಗೆದುಕೊಳ್ಳಿ",
+
+        photoHelp:
+            "ಸ್ಪಷ್ಟವಾದ ಫೋಟೋ ಆರೋಗ್ಯ ಮೌಲ್ಯಮಾಪನಕ್ಕೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ.",
+
+        locationLabel:
+            "ನಿಮ್ಮ ಸ್ಥಳ",
+
+        locationButton:
+            "📍 ನನ್ನ ಪ್ರಸ್ತುತ ಸ್ಥಳವನ್ನು ಬಳಸಿ",
+
+        submitButton:
+            "🚨 ಆರೋಗ್ಯ ವರದಿಯನ್ನು ಸಲ್ಲಿಸಿ",
+
+        backButton:
+            "← ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಹಿಂತಿರುಗಿ"
+
+    }
+
+};
+
+
+/* =====================================================
+   CHANGE LANGUAGE
+===================================================== */
+
+function changeLanguage() {
+
+    const language =
+        document.getElementById(
+            "language"
+        ).value;
+
+
+    const t =
+        translations[language];
+
+
+    document.getElementById(
+        "pageTitle"
+    ).textContent =
+        t.pageTitle;
+
+
+    document.getElementById(
+        "pageDescription"
+    ).textContent =
+        t.pageDescription;
+
+
+    document.getElementById(
+        "animalLabel"
+    ).textContent =
+        t.animalLabel;
+
+
+    document.getElementById(
+        "symptomsLabel"
+    ).textContent =
+        t.symptomsLabel;
+
+
+    document.getElementById(
+        "temperatureLabel"
+    ).textContent =
+        t.temperatureLabel;
+
+
+    document.getElementById(
+        "photoLabel"
+    ).textContent =
+        t.photoLabel;
+
+
+    document.getElementById(
+        "photoText"
+    ).textContent =
+        t.photoText;
+
+
+    document.getElementById(
+        "photoHelp"
+    ).textContent =
+        t.photoHelp;
+
+
+    document.getElementById(
+        "locationLabel"
+    ).textContent =
+        t.locationLabel;
+
+
+    /*
+     * Only change the location button
+     * if location has not already been captured.
+     */
+
+    const locationButton =
+        document.getElementById(
+            "locationButton"
+        );
+
+
+    if (
+        locationButton &&
+        !locationCaptured
+    ) {
+
+        locationButton.textContent =
+            t.locationButton;
+
+    }
+
+
+    /*
+     * Don't overwrite the submit button
+     * with translated text if location
+     * has not been captured.
+     */
+
+    const submitButton =
+        document.getElementById(
+            "submitButton"
+        );
+
+
+    if (
+        submitButton &&
+        locationCaptured
+    ) {
+
+        submitButton.textContent =
+            t.submitButton;
+
+    }
+
+
+    document.getElementById(
+        "backButton"
+    ).textContent =
+        t.backButton;
+
+
+    /* =========================================
+       ANIMAL HELP
+    ========================================= */
+
+    const animalHelp =
+        document.getElementById(
+            "animalHelp"
+        );
+
+
+    if (animalHelp) {
+
+        animalHelp.textContent =
+            t.animalHelp;
+
+    }
+
+
+    /* =========================================
+       NO ANIMAL MESSAGE
+    ========================================= */
+
+    const noAnimalBox =
+        document.getElementById(
+            "noAnimalBox"
+        );
+
+
+    if (noAnimalBox) {
+
+        noAnimalBox.innerHTML =
+            t.noAnimal +
+            "<br>" +
+            "<a href=\"/animals/add/\" class=\"add-animal-button\" id=\"addAnimalButton\">" +
+            t.addAnimal +
+            "</a>";
+
+    }
+
+
+    /* =========================================
+       SYMPTOMS
+    ========================================= */
+
+    document
+        .querySelectorAll(
+            ".symptom-text"
+        )
+        .forEach(
+            function(element) {
+
+                if (
+                    language ===
+                    "English"
+                ) {
+
+                    element.textContent =
+                        element.dataset.en;
+
+                }
+
+                else if (
+                    language ===
+                    "Telugu"
+                ) {
+
+                    element.textContent =
+                        element.dataset.te;
+
+                }
+
+                else if (
+                    language ===
+                    "Hindi"
+                ) {
+
+                    element.textContent =
+                        element.dataset.hi;
+
+                }
+
+                else if (
+                    language ===
+                    "Tamil"
+                ) {
+
+                    element.textContent =
+                        element.dataset.ta;
+
+                }
+
+                else if (
+                    language ===
+                    "Kannada"
+                ) {
+
+                    element.textContent =
+                        element.dataset.kn;
+
+                }
+
+            }
+        );
+
+
+    /* =========================================
+       SAVE LANGUAGE
+    ========================================= */
+
+    localStorage.setItem(
+        "livestock_language",
+        language
+    );
+
+}
+
+
+/* =====================================================
+   FORM SUBMISSION VALIDATION
+===================================================== */
+
+document
+    .getElementById("reportForm")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            const animalField =
+                document.getElementById(
+                    "id_animal"
+                );
+
+
+            const latitudeField =
+                document.getElementById(
+                    "id_latitude"
+                );
+
+
+            const longitudeField =
+                document.getElementById(
+                    "id_longitude"
+                );
+
+
+            /*
+             * Animal validation
+             */
+
+            if (
+                !animalField ||
+                !animalField.value
+            ) {
+
+                event.preventDefault();
+
+                alert(
+                    "Please select an animal before submitting the health report."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * GPS validation
+             *
+             * This is the important fix.
+             */
+
+            if (
+                !latitudeField ||
+                !longitudeField ||
+                !latitudeField.value ||
+                !longitudeField.value
+            ) {
+
+                event.preventDefault();
+
+                alert(
+                    "Please allow location access and wait for your location to be captured before submitting."
+                );
+
+
+                getLocation();
+
+                return;
+
+            }
+
+
+            /*
+             * Make sure values are numeric.
+             */
+
+            const latitude =
+                parseFloat(
+                    latitudeField.value
+                );
+
+            const longitude =
+                parseFloat(
+                    longitudeField.value
+                );
+
+
+            if (
+                Number.isNaN(latitude) ||
+                Number.isNaN(longitude)
+            ) {
+
+                event.preventDefault();
+
+                alert(
+                    "Your location could not be verified. Please try again."
+                );
+
+                getLocation();
+
+                return;
+
+            }
+
+
+            /*
+             * Final console verification.
+             */
+
+            console.log(
+                "SUBMITTING REPORT"
+            );
+
+            console.log(
+                "Latitude:",
+                latitudeField.value
+            );
+
+            console.log(
+                "Longitude:",
+                longitudeField.value
+            );
+
+            console.log(
+                "Address:",
+                document.getElementById(
+                    "id_location_address"
+                )
+                    ? document.getElementById(
+                        "id_location_address"
+                    ).value
+                    : ""
+            );
+
+
+            /*
+             * Prevent double submission.
+             */
+
+            const submitButton =
+                document.getElementById(
+                    "submitButton"
+                );
+
+
+            if (submitButton) {
+
+                submitButton.disabled = true;
+
+                submitButton.textContent =
+                    "⏳ Submitting Report...";
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        /*
+         * Restore language
+         */
+
+        const savedLanguage =
+            localStorage.getItem(
+                "livestock_language"
+            );
+
+
+        if (
+            savedLanguage &&
+            translations[savedLanguage]
+        ) {
+
+            document.getElementById(
+                "language"
+            ).value =
+                savedLanguage;
+
+        }
+
+
+        /*
+         * Apply language
+         */
+
+        changeLanguage();
+
+
+        /*
+         * Initialize map
+         */
+
+        initializeMap();
+
+
+        /*
+         * Start GPS automatically.
+         */
+
+        setTimeout(
+            function() {
+
+                getLocation();
+
+            },
+            500
+        );
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

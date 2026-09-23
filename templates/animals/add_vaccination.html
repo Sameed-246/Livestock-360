@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Vaccination | Livestock 360°</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+            color: #17351f;
+        }
+
+        header {
+            background: #166534;
+            color: white;
+            padding: 17px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.07);
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            border-radius: 20px;
+            background: #dcfce7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 27px;
+        }
+
+        .intro p {
+            margin: 0;
+            color: #66756b;
+        }
+
+        .animal-info {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 13px;
+            padding: 15px;
+            margin-bottom: 24px;
+        }
+
+        .animal-info strong {
+            color: #166534;
+        }
+
+        .field {
+            margin-bottom: 19px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #cbd5ce;
+            border-radius: 10px;
+            font-size: 15px;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+        }
+
+        .help {
+            color: #7a867e;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .button {
+            flex: 1;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .save-button {
+            background: #166534;
+            color: white;
+        }
+
+        .save-button:hover {
+            background: #14532d;
+        }
+
+        .cancel-button {
+            background: #e8f2ea;
+            color: #166534;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        @media (max-width: 550px) {
+
+            .container {
+                margin-top: 18px;
+                padding: 0 12px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="brand">
+        🐄 Livestock 360°
+    </div>
+
+    <a
+        href="{% url 'animal_detail' animal.id %}"
+        class="back"
+    >
+        ← Animal Details
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <div class="card">
+
+
+        <div class="intro">
+
+            <div class="icon">
+                💉
+            </div>
+
+            <h1>
+                Add Vaccination
+            </h1>
+
+            <p>
+                Keep {{ animal.animal_id }}'s vaccination
+                history up to date.
+            </p>
+
+        </div>
+
+
+        <div class="animal-info">
+
+            🐾
+            <strong>
+                Animal:
+            </strong>
+
+            {{ animal.animal_id }}
+
+            &nbsp; · &nbsp;
+
+            {{ animal.animal_type }}
+
+            &nbsp; · &nbsp;
+
+            {{ animal.breed }}
+
+        </div>
+
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            <div class="field">
+
+                <label for="{{ form.vaccine_name.id_for_label }}">
+                    Vaccine Name
+                    <span class="required">*</span>
+                </label>
+
+                {{ form.vaccine_name }}
+
+                {% if form.vaccine_name.errors %}
+                    <div class="error">
+                        {{ form.vaccine_name.errors }}
+                    </div>
+                {% endif %}
+
+                <div class="help">
+                    Example: FMD Vaccine, Brucellosis Vaccine
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="{{ form.date_given.id_for_label }}">
+                    Date Given
+                    <span class="required">*</span>
+                </label>
+
+                {{ form.date_given }}
+
+                {% if form.date_given.errors %}
+                    <div class="error">
+                        {{ form.date_given.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="{{ form.next_due_date.id_for_label }}">
+                    Next Due Date
+                </label>
+
+                {{ form.next_due_date }}
+
+                {% if form.next_due_date.errors %}
+                    <div class="error">
+                        {{ form.next_due_date.errors }}
+                    </div>
+                {% endif %}
+
+                <div class="help">
+                    Enter the next vaccination date if known.
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="{{ form.veterinarian_name.id_for_label }}">
+                    Veterinarian Name
+                </label>
+
+                {{ form.veterinarian_name }}
+
+                {% if form.veterinarian_name.errors %}
+                    <div class="error">
+                        {{ form.veterinarian_name.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="{{ form.notes.id_for_label }}">
+                    Notes
+                </label>
+
+                {{ form.notes }}
+
+                {% if form.notes.errors %}
+                    <div class="error">
+                        {{ form.notes.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            {% if form.non_field_errors %}
+
+                <div class="error">
+                    {{ form.non_field_errors }}
+                </div>
+
+            {% endif %}
+
+
+            <div class="buttons">
+
+                <a
+                    href="{% url 'animal_detail' animal.id %}"
+                    class="button cancel-button"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="button save-button"
+                >
+                    💉 Save Vaccination
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

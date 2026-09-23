@@ -1,0 +1,2475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Livestock 360° | Farmer Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8f3;
+            color: #26382a;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            background: linear-gradient(
+                135deg,
+                #176b3a,
+                #239653
+            );
+
+            color: white;
+            padding: 18px 5%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+
+            background: rgba(255,255,255,0.15);
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 27px;
+        }
+
+        .brand-text h1 {
+            font-size: 24px;
+            margin-bottom: 3px;
+        }
+
+        .brand-text p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .language-select {
+            background: white;
+            color: #176b3a;
+
+            border: none;
+            border-radius: 9px;
+
+            padding: 9px 12px;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.14);
+            color: white;
+
+            border: 1px solid rgba(255,255,255,0.3);
+
+            padding: 9px 15px;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #176b3a;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+
+            margin: 30px auto 50px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            font-size: 28px;
+            color: #183c26;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: #647268;
+            font-size: 15px;
+        }
+
+        /* =========================
+           VOICE
+        ========================= */
+
+        .voice-panel {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 15px 18px;
+
+            margin-bottom: 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            border: 1px solid #e2ebe3;
+
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        }
+
+        .voice-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .voice-icon {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            background: #e7f5ea;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+        .voice-info h3 {
+            font-size: 15px;
+            color: #214a2c;
+            margin-bottom: 3px;
+        }
+
+        .voice-info p {
+            font-size: 12px;
+            color: #78847b;
+        }
+
+        .voice-btn {
+            border: none;
+
+            background: #176b3a;
+            color: white;
+
+            padding: 10px 17px;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .voice-btn:hover {
+            background: #0f512b;
+        }
+
+        /* =========================
+           ACTION CARDS
+        ========================= */
+
+        .actions {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: white;
+
+            border-radius: 17px;
+
+            padding: 23px 18px;
+
+            text-decoration: none;
+
+            color: inherit;
+
+            border: 1px solid #e1ebe3;
+
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+
+            transition:
+                transform 0.2s,
+                box-shadow 0.2s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 10px 22px rgba(0,0,0,0.10);
+        }
+
+        .action-icon {
+            width: 52px;
+            height: 52px;
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+
+            margin-bottom: 15px;
+        }
+
+        .green {
+            background: #e5f5e8;
+        }
+
+        .blue {
+            background: #e5f0fa;
+        }
+
+        .orange {
+            background: #fff1dc;
+        }
+
+        .red {
+            background: #fde8e8;
+        }
+
+        .action-card h3 {
+            font-size: 16px;
+
+            margin-bottom: 7px;
+
+            color: #23452c;
+        }
+
+        .action-card p {
+            font-size: 12px;
+
+            color: #778178;
+
+            line-height: 1.5;
+        }
+
+        .arrow {
+            display: block;
+
+            margin-top: 15px;
+
+            color: #176b3a;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           STATISTICS
+        ========================= */
+
+        .section-title {
+            font-size: 21px;
+
+            color: #21482b;
+
+            margin-bottom: 15px;
+        }
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            border: 1px solid #e1ebe3;
+
+            box-shadow: 0 4px 13px rgba(0,0,0,0.04);
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+
+            background: #e8f5eb;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 22px;
+        }
+
+        .stat-number {
+            font-size: 25px;
+
+            font-weight: bold;
+
+            color: #176b3a;
+        }
+
+        .stat-label {
+            font-size: 12px;
+
+            color: #748078;
+
+            margin-top: 2px;
+        }
+
+        /* =========================
+           ANIMALS
+        ========================= */
+
+        .section-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 15px;
+        }
+
+        .view-all {
+            text-decoration: none;
+
+            color: #176b3a;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        .animals-container {
+            background: white;
+
+            border-radius: 17px;
+
+            padding: 20px;
+
+            border: 1px solid #e1ebe3;
+
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+
+            margin-bottom: 30px;
+        }
+
+        .animal-list {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 14px;
+        }
+
+        .animal-card {
+            border: 1px solid #e5ebe6;
+
+            border-radius: 13px;
+
+            padding: 16px;
+
+            background: #fbfdfb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 12px;
+        }
+
+        .animal-left {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .animal-icon {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 12px;
+
+            background: #e5f5e8;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 23px;
+        }
+
+        .animal-name {
+            font-weight: bold;
+
+            color: #28452f;
+
+            margin-bottom: 5px;
+        }
+
+        .animal-info {
+            font-size: 12px;
+
+            color: #758078;
+
+            line-height: 1.5;
+        }
+
+        .animal-status {
+            font-size: 11px;
+
+            font-weight: bold;
+
+            padding: 6px 9px;
+
+            border-radius: 20px;
+
+            white-space: nowrap;
+        }
+
+        .vaccinated {
+            background: #e4f5e8;
+            color: #19713a;
+        }
+
+        .not-vaccinated {
+            background: #fff0df;
+            color: #9b5a13;
+        }
+
+        .animal-view {
+            display: inline-block;
+
+            margin-top: 7px;
+
+            color: #176b3a;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           REPORTS
+        ========================= */
+
+        .reports-container {
+            background: white;
+
+            border-radius: 17px;
+
+            padding: 20px;
+
+            border: 1px solid #e1ebe3;
+
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+        }
+
+        .report-item {
+            padding: 15px 0;
+
+            border-bottom: 1px solid #edf1ed;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .report-item:last-child {
+            border-bottom: none;
+        }
+
+        .report-main {
+            min-width: 0;
+        }
+
+        .report-animal {
+            font-weight: bold;
+
+            color: #294730;
+
+            margin-bottom: 5px;
+        }
+
+        .report-symptoms {
+            color: #68736c;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            max-width: 600px;
+        }
+
+        .report-date {
+            color: #929a94;
+
+            font-size: 11px;
+
+            margin-top: 4px;
+        }
+
+        .report-status {
+            padding: 7px 11px;
+
+            border-radius: 20px;
+
+            background: #fff3dc;
+
+            color: #9b641d;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty {
+            text-align: center;
+
+            padding: 35px 15px;
+
+            color: #7d8780;
+        }
+
+        .empty-icon {
+            font-size: 42px;
+
+            margin-bottom: 12px;
+        }
+
+        .empty h3 {
+            color: #36523c;
+
+            margin-bottom: 7px;
+        }
+
+        .empty p {
+            font-size: 13px;
+
+            margin-bottom: 15px;
+        }
+
+        .primary-btn {
+            display: inline-block;
+
+            background: #176b3a;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 10px 17px;
+
+            border-radius: 9px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            text-align: center;
+
+            padding: 25px 10px;
+
+            color: #7b857e;
+
+            font-size: 11px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .actions {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .animal-list {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .header {
+                padding: 14px 4%;
+            }
+
+            .brand-text h1 {
+                font-size: 19px;
+            }
+
+            .brand-icon {
+                width: 42px;
+                height: 42px;
+            }
+
+            .header-right {
+                gap: 6px;
+            }
+
+            .logout-btn {
+                padding: 8px 10px;
+            }
+
+            .language-select {
+                padding: 8px;
+            }
+
+            .container {
+                width: 92%;
+                margin-top: 22px;
+            }
+
+            .welcome h2 {
+                font-size: 23px;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .voice-panel {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .voice-btn {
+                width: 100%;
+            }
+
+            .report-item {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .report-status {
+                align-self: flex-start;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🐄
+        </div>
+
+        <div class="brand-text">
+
+            <h1>Livestock 360°</h1>
+
+            <p>AI-Powered Livestock Health & Early Warning</p>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-right">
+
+        <select
+            id="languageSelect"
+            class="language-select"
+            onchange="changeLanguage()"
+        >
+
+            <option value="en-IN">
+                English
+            </option>
+
+            <option value="te-IN">
+                తెలుగు
+            </option>
+
+            <option value="hi-IN">
+                हिन्दी
+            </option>
+
+            <option value="ta-IN">
+                தமிழ்
+            </option>
+
+            <option value="kn-IN">
+                ಕನ್ನಡ
+            </option>
+
+        </select>
+
+<form method="post" action="{% url 'logout' %}" style="display: inline;">
+    {% csrf_token %}
+    <button type="submit" class="logout-btn">
+        Logout
+    </button>
+</form>
+    </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="container">
+
+
+    <!-- WELCOME -->
+
+    <section class="welcome">
+
+        <h2 id="welcomeTitle">
+            Welcome, {{ request.user.username }} 👋
+        </h2>
+
+        <p id="welcomeText">
+            Manage your livestock, monitor animal health,
+            and report health problems easily.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         VOICE PANEL
+    ========================= -->
+
+    <section class="voice-panel">
+
+        <div class="voice-info">
+
+            <div class="voice-icon">
+                🔊
+            </div>
+
+            <div>
+
+                <h3>
+                    Voice Assistance
+                </h3>
+
+                <p id="voiceStatus">
+                    Tap the button to hear dashboard instructions.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="voice-btn"
+            id="voiceButton"
+            onclick="toggleVoice()"
+        >
+            🔊 Speak
+        </button>
+
+    </section>
+
+
+    <!-- =========================
+         QUICK ACTIONS
+    ========================= -->
+
+    <h2 class="section-title">
+        Quick Actions
+    </h2>
+
+
+    <section class="actions">
+
+
+        <!-- CHECK HEALTH -->
+
+        <a
+            href="{% url 'animal_list' %}"
+            class="action-card"
+            data-speech="Check Animal Health. View your registered animals and their health information."
+        >
+
+            <div class="action-icon green">
+                🩺
+            </div>
+
+            <h3>
+                Check Animal Health
+            </h3>
+
+            <p>
+                View your livestock and monitor their
+                health history.
+            </p>
+
+            <span class="arrow">
+                View Animals →
+            </span>
+
+        </a>
+
+
+        <!-- REGISTER ANIMAL -->
+
+        <a
+            href="{% url 'add_animal' %}"
+            class="action-card"
+            data-speech="Register Livestock. Add a new animal to your livestock records."
+        >
+
+            <div class="action-icon blue">
+                🐄
+            </div>
+
+            <h3>
+                Register Livestock
+            </h3>
+
+            <p>
+                Add a new cow, buffalo, goat, sheep,
+                or other livestock.
+            </p>
+
+            <span class="arrow">
+                Add Animal →
+            </span>
+
+        </a>
+
+
+        <!-- REPORT SYMPTOMS -->
+
+        <a
+            href="{% url 'report_problem' %}"
+            class="action-card"
+            data-speech="Report Symptoms. Report health problems or symptoms noticed in your animal."
+        >
+
+            <div class="action-icon orange">
+                📋
+            </div>
+
+            <h3>
+                Report Symptoms
+            </h3>
+
+            <p>
+                Report symptoms and health problems
+                for early risk detection.
+            </p>
+
+            <span class="arrow">
+                Report Problem →
+            </span>
+
+        </a>
+
+
+        <!-- HEALTH ALERTS -->
+
+        <a
+            href="{% url 'notification_center' %}"
+            class="action-card"
+            data-speech="Health Alerts. View important livestock health alerts and high-risk notifications."
+        >
+
+            <div class="action-icon red">
+                🚨
+            </div>
+
+            <h3>
+                Health Alerts
+            </h3>
+
+            <p>
+                View important health warnings and
+                high-risk livestock alerts.
+            </p>
+
+            <span class="arrow">
+                View Alerts →
+            </span>
+
+        </a>
+
+
+    </section>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================= -->
+
+    <h2 class="section-title">
+        Your Livestock Overview
+    </h2>
+
+
+    <section class="stats">
+
+
+        <div
+            class="stat-card"
+            data-speech="You have {{ animal_count }} animals registered."
+        >
+
+            <div class="stat-icon">
+                🐄
+            </div>
+
+            <div>
+
+                <div class="stat-number">
+                    {{ animal_count }}
+                </div>
+
+                <div class="stat-label">
+                    My Animals
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="stat-card"
+            data-speech="You have {{ report_count }} health reports."
+        >
+
+            <div class="stat-icon">
+                📋
+            </div>
+
+            <div>
+
+                <div class="stat-number">
+                    {{ report_count }}
+                </div>
+
+                <div class="stat-label">
+                    Health Reports
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="stat-card"
+            data-speech="You have {{ pending_count }} pending health reports."
+        >
+
+            <div class="stat-icon">
+                ⏳
+            </div>
+
+            <div>
+
+                <div class="stat-number">
+                    {{ pending_count }}
+                </div>
+
+                <div class="stat-label">
+                    Pending Reports
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =========================
+         MY ANIMALS
+    ========================= -->
+
+    <div class="section-header">
+
+        <h2 class="section-title">
+            My Animals
+        </h2>
+
+        <a
+            href="{% url 'animal_list' %}"
+            class="view-all"
+        >
+            View All →
+        </a>
+
+    </div>
+
+
+    <section class="animals-container">
+
+
+        {% if animals %}
+
+            <div class="animal-list">
+
+                {% for animal in animals %}
+
+                    <div class="animal-card">
+
+                        <div class="animal-left">
+
+                            <div class="animal-icon">
+
+                                {% if animal.animal_type == "Cattle" %}
+                                    🐄
+                                {% elif animal.animal_type == "Buffalo" %}
+                                    🐃
+                                {% elif animal.animal_type == "Goat" %}
+                                    🐐
+                                {% elif animal.animal_type == "Sheep" %}
+                                    🐑
+                                {% else %}
+                                    🐾
+                                {% endif %}
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="animal-name">
+                                    {{ animal.animal_id }}
+                                </div>
+
+                                <div class="animal-info">
+
+                                    {{ animal.animal_type }}
+                                    •
+                                    {{ animal.breed }}
+                                    •
+                                    {{ animal.age }} years
+
+                                    <br>
+
+                                    {{ animal.gender }}
+
+                                </div>
+
+
+                                <a
+                                    href="{% url 'animal_detail' animal.id %}"
+                                    class="animal-view"
+                                >
+                                    View Animal →
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+                        {% if animal.vaccination_status %}
+
+                            <span class="animal-status vaccinated">
+                                ✓ Vaccinated
+                            </span>
+
+                        {% else %}
+
+                            <span class="animal-status not-vaccinated">
+                                ⚠ Vaccination Due
+                            </span>
+
+                        {% endif %}
+
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🐄
+                </div>
+
+                <h3>
+                    No animals registered yet
+                </h3>
+
+                <p>
+                    Register your first livestock animal
+                    to start monitoring its health.
+                </p>
+
+                <a
+                    href="{% url 'add_animal' %}"
+                    class="primary-btn"
+                >
+                    + Register Livestock
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </section>
+
+
+    <!-- =========================
+         RECENT REPORTS
+    ========================= -->
+
+    <div class="section-header">
+
+        <h2 class="section-title">
+            Recent Health Reports
+        </h2>
+
+        <a
+            href="{% url 'report_problem' %}"
+            class="view-all"
+        >
+            Report Symptoms →
+        </a>
+
+    </div>
+
+
+    <section class="reports-container">
+
+
+        {% if recent_reports %}
+
+            {% for report in recent_reports %}
+
+                <div
+                    class="report-item"
+                    data-speech="Health report for animal {{ report.animal.animal_id }}. Symptoms: {{ report.symptoms }}. Status: {{ report.status }}."
+                >
+
+                    <div class="report-main">
+
+                        <div class="report-animal">
+
+                            🐄 {{ report.animal.animal_id }}
+
+                        </div>
+
+
+                        <div class="report-symptoms">
+
+                            {{ report.symptoms }}
+
+                        </div>
+
+
+                        <div class="report-date">
+
+                            {{ report.created_at|date:"d M Y, h:i A" }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="report-status">
+
+                        {{ report.status }}
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    📋
+                </div>
+
+                <h3>
+                    No health reports yet
+                </h3>
+
+                <p>
+                    If your animal shows any unusual
+                    symptoms, report them early.
+                </p>
+
+                <a
+                    href="{% url 'report_problem' %}"
+                    class="primary-btn"
+                >
+                    Report Symptoms
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    Livestock 360° • AI-Powered Livestock Health
+    & Early Warning System
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   LIVESTOCK 360° VOICE SYSTEM
+   ========================================================= */
+
+let speechActive = false;
+let selectedLanguage = "en-IN";
+let selectedVoice = null;
+
+let audioQueue = [];
+let currentAudio = null;
+let onlineVoiceRunning = false;
+
+
+/* =========================================================
+   LANGUAGE CONFIGURATION
+   ========================================================= */
+
+const languageConfig = {
+
+    "en-IN": {
+        browserLang: "en-IN",
+        shortLang: "en",
+        rate: 0.82,
+        pitch: 1.08
+    },
+
+    "te-IN": {
+        browserLang: "te-IN",
+        shortLang: "te",
+        rate: 0.80,
+        pitch: 1.05
+    },
+
+    "hi-IN": {
+        browserLang: "hi-IN",
+        shortLang: "hi",
+        rate: 0.80,
+        pitch: 1.05
+    },
+
+    "ta-IN": {
+        browserLang: "ta-IN",
+        shortLang: "ta",
+        rate: 0.80,
+        pitch: 1.05
+    },
+
+    "kn-IN": {
+        browserLang: "kn-IN",
+        shortLang: "kn",
+        rate: 0.80,
+        pitch: 1.05
+    }
+
+};
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+function setVoiceStatus(text) {
+
+    const status =
+        document.getElementById("voiceStatus");
+
+    if (status) {
+        status.innerText = text;
+    }
+
+}
+
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+function setVoiceButton(text) {
+
+    const button =
+        document.getElementById("voiceButton");
+
+    if (button) {
+        button.innerHTML = text;
+    }
+
+}
+
+
+/* =========================================================
+   STOP EVERYTHING
+   ========================================================= */
+
+function stopVoice() {
+
+    /* Stop browser speech */
+
+    try {
+        window.speechSynthesis.cancel();
+    }
+    catch (e) {
+        console.log(e);
+    }
+
+
+    /* Stop online audio */
+
+    if (currentAudio) {
+
+        currentAudio.pause();
+
+        currentAudio.currentTime = 0;
+
+        currentAudio.src = "";
+
+        currentAudio = null;
+
+    }
+
+
+    /* Clear queue */
+
+    audioQueue = [];
+
+    onlineVoiceRunning = false;
+
+    speechActive = false;
+
+
+    setVoiceButton("🔊 Speak");
+
+}
+
+
+/* =========================================================
+   LOAD BROWSER VOICE
+   ========================================================= */
+
+function loadBestVoice() {
+
+    const voices =
+        window.speechSynthesis.getVoices();
+
+    const config =
+        languageConfig[selectedLanguage];
+
+
+    selectedVoice = null;
+
+
+    if (!config) {
+        return;
+    }
+
+
+    console.log(
+        "Searching voice for:",
+        selectedLanguage
+    );
+
+
+    console.log(
+        "Available voices:"
+    );
+
+
+    voices.forEach(function(voice) {
+
+        console.log(
+            voice.name +
+            " | " +
+            voice.lang
+        );
+
+    });
+
+
+    /*
+     * Find exact language.
+     */
+
+    let exactVoice =
+        voices.find(function(voice) {
+
+            return voice.lang.toLowerCase() ===
+                config.browserLang.toLowerCase();
+
+        });
+
+
+    if (exactVoice) {
+
+        selectedVoice =
+            exactVoice;
+
+        return;
+
+    }
+
+
+    /*
+     * Find language prefix.
+     */
+
+    let languageVoice =
+        voices.find(function(voice) {
+
+            return voice.lang
+                .toLowerCase()
+                .startsWith(
+                    config.shortLang
+                );
+
+        });
+
+
+    if (languageVoice) {
+
+        selectedVoice =
+            languageVoice;
+
+    }
+
+}
+
+
+/* =========================================================
+   SPLIT TEXT INTO SMALL CHUNKS
+   ========================================================= */
+
+function splitText(text) {
+
+    /*
+     * Split mainly at sentence endings.
+     */
+
+    let sentences =
+        text.split(/(?<=[.!?।॥])\s+/);
+
+
+    /*
+     * If browser does not support the above
+     * properly, use a simple fallback.
+     */
+
+    if (!sentences.length) {
+
+        sentences = [text];
+
+    }
+
+
+    let chunks = [];
+
+
+    sentences.forEach(function(sentence) {
+
+        sentence =
+            sentence.trim();
+
+
+        if (!sentence) {
+            return;
+        }
+
+
+        /*
+         * Keep chunks short.
+         */
+
+        if (sentence.length <= 180) {
+
+            chunks.push(sentence);
+
+        }
+
+        else {
+
+            /*
+             * Split long sentences.
+             */
+
+            for (
+                let i = 0;
+                i < sentence.length;
+                i += 180
+            ) {
+
+                chunks.push(
+                    sentence.substring(
+                        i,
+                        i + 180
+                    )
+                );
+
+            }
+
+        }
+
+    });
+
+
+    return chunks;
+
+}
+
+
+/* =========================================================
+   ONLINE GOOGLE TTS
+   ========================================================= */
+
+function speakOnline(text, language) {
+
+    stopVoice();
+
+
+    const chunks =
+        splitText(text);
+
+
+    if (!chunks.length) {
+
+        return;
+
+    }
+
+
+    audioQueue =
+        chunks;
+
+
+    onlineVoiceRunning = true;
+
+    speechActive = true;
+
+
+    setVoiceButton(
+        "⏹ Stop Voice"
+    );
+
+
+    setVoiceStatus(
+        "Speaking in " +
+        getLanguageName(selectedLanguage) +
+        "..."
+    );
+
+
+    playNextAudio(language);
+
+}
+
+
+/* =========================================================
+   PLAY NEXT AUDIO CHUNK
+   ========================================================= */
+
+function playNextAudio(language) {
+
+    if (!onlineVoiceRunning) {
+
+        return;
+
+    }
+
+
+    /*
+     * Finished all chunks.
+     */
+
+    if (audioQueue.length === 0) {
+
+        currentAudio = null;
+
+        onlineVoiceRunning = false;
+
+        speechActive = false;
+
+
+        setVoiceButton(
+            "🔊 Speak"
+        );
+
+
+        setVoiceStatus(
+            "Voice assistance is ready."
+        );
+
+
+        return;
+
+    }
+
+
+    const text =
+        audioQueue.shift();
+
+
+    console.log(
+        "Playing " +
+        language +
+        ":",
+        text
+    );
+
+
+    const url =
+        "https://translate.google.com/translate_tts" +
+        "?ie=UTF-8" +
+        "&client=tw-ob" +
+        "&tl=" +
+        encodeURIComponent(language) +
+        "&q=" +
+        encodeURIComponent(text);
+
+
+    currentAudio =
+        new Audio();
+
+
+    currentAudio.src =
+        url;
+
+
+    currentAudio.preload =
+        "auto";
+
+
+    currentAudio.volume =
+        1.0;
+
+
+    currentAudio.onplay =
+        function() {
+
+            console.log(
+                "Online voice started"
+            );
+
+        };
+
+
+    currentAudio.onended =
+        function() {
+
+            console.log(
+                "Audio chunk completed"
+            );
+
+
+            currentAudio = null;
+
+
+            /*
+             * Small delay between sentences.
+             */
+
+            setTimeout(
+                function() {
+
+                    playNextAudio(
+                        language
+                    );
+
+                },
+                100
+            );
+
+        };
+
+
+    currentAudio.onerror =
+        function(error) {
+
+            console.log(
+                "Google TTS audio error:",
+                error
+            );
+
+
+            currentAudio = null;
+
+
+            /*
+             * Try next chunk instead of
+             * completely stopping.
+             */
+
+            setTimeout(
+                function() {
+
+                    playNextAudio(
+                        language
+                    );
+
+                },
+                200
+            );
+
+        };
+
+
+    currentAudio
+        .play()
+        .then(function() {
+
+            console.log(
+                "Audio playing successfully"
+            );
+
+        })
+        .catch(function(error) {
+
+            console.log(
+                "Audio play rejected:",
+                error
+            );
+
+
+            currentAudio = null;
+
+
+            onlineVoiceRunning = false;
+
+            speechActive = false;
+
+
+            setVoiceButton(
+                "🔊 Speak"
+            );
+
+
+            setVoiceStatus(
+                "Please click Speak again."
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   BROWSER VOICE
+   ========================================================= */
+
+function speakBrowser(text) {
+
+    stopVoice();
+
+
+    loadBestVoice();
+
+
+    const config =
+        languageConfig[selectedLanguage];
+
+
+    /*
+     * Browser voice is unavailable.
+     */
+
+    if (!selectedVoice) {
+
+        setVoiceStatus(
+            getLanguageName(
+                selectedLanguage
+            ) +
+            " browser voice is not available."
+        );
+
+
+        console.log(
+            "No browser voice for:",
+            selectedLanguage
+        );
+
+
+        return;
+
+    }
+
+
+    const speech =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    speech.lang =
+        config.browserLang;
+
+
+    speech.voice =
+        selectedVoice;
+
+
+    speech.rate =
+        config.rate;
+
+
+    speech.pitch =
+        config.pitch;
+
+
+    speech.volume =
+        1.0;
+
+
+    speech.onstart =
+        function() {
+
+            speechActive = true;
+
+
+            setVoiceButton(
+                "⏹ Stop Voice"
+            );
+
+
+            setVoiceStatus(
+                "Speaking in " +
+                getLanguageName(
+                    selectedLanguage
+                ) +
+                "..."
+            );
+
+        };
+
+
+    speech.onend =
+        function() {
+
+            speechActive = false;
+
+
+            setVoiceButton(
+                "🔊 Speak"
+            );
+
+
+            setVoiceStatus(
+                "Voice assistance is ready."
+            );
+
+        };
+
+
+    speech.onerror =
+        function(event) {
+
+            console.log(
+                "Browser speech error:",
+                event
+            );
+
+
+            speechActive = false;
+
+
+            setVoiceButton(
+                "🔊 Speak"
+            );
+
+
+            setVoiceStatus(
+                "Unable to play voice."
+            );
+
+        };
+
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+/* =========================================================
+   MAIN SPEAK FUNCTION
+   ========================================================= */
+
+function speakText(text) {
+
+    if (!text) {
+        return;
+    }
+
+
+    /*
+     * TELUGU
+     *
+     * Do NOT depend on Windows voice.
+     */
+
+    if (selectedLanguage === "te-IN") {
+
+        speakOnline(
+            text,
+            "te"
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * TAMIL
+     *
+     * Do NOT depend on Windows voice.
+     */
+
+    if (selectedLanguage === "ta-IN") {
+
+        speakOnline(
+            text,
+            "ta"
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * ENGLISH / HINDI / KANNADA
+     */
+
+    speakBrowser(text);
+
+}
+
+
+/* =========================================================
+   LANGUAGE NAME
+   ========================================================= */
+
+function getLanguageName(language) {
+
+    switch (language) {
+
+        case "en-IN":
+            return "English";
+
+        case "te-IN":
+            return "Telugu";
+
+        case "hi-IN":
+            return "Hindi";
+
+        case "ta-IN":
+            return "Tamil";
+
+        case "kn-IN":
+            return "Kannada";
+
+        default:
+            return "selected language";
+
+    }
+
+}
+
+
+/* =========================================================
+   CHANGE LANGUAGE
+   ========================================================= */
+
+function changeLanguage() {
+
+    const selector =
+        document.getElementById(
+            "languageSelect"
+        );
+
+
+    selectedLanguage =
+        selector.value;
+
+
+    /*
+     * Stop old language.
+     */
+
+    stopVoice();
+
+
+    /*
+     * Load browser voice.
+     */
+
+    loadBestVoice();
+
+
+    /*
+     * Show correct message.
+     */
+
+    setVoiceStatus(
+        getLanguageName(
+            selectedLanguage
+        ) +
+        " voice assistance is ready. Tap Speak."
+    );
+
+}
+
+
+/* =========================================================
+   DASHBOARD VOICE
+   ========================================================= */
+
+function toggleVoice() {
+
+    /*
+     * Stop if already speaking.
+     */
+
+    if (speechActive) {
+
+        stopVoice();
+
+
+        setVoiceStatus(
+            "Voice assistance stopped."
+        );
+
+
+        return;
+
+    }
+
+
+    const username =
+        "{{ request.user.username }}";
+
+
+    const animalCount =
+        "{{ animal_count }}";
+
+
+    const reportCount =
+        "{{ report_count }}";
+
+
+    const pendingCount =
+        "{{ pending_count }}";
+
+
+    let message = "";
+
+
+    /* =====================================================
+       ENGLISH
+       ===================================================== */
+
+    if (
+        selectedLanguage === "en-IN"
+    ) {
+
+        message =
+            "Hello " +
+            username +
+            ". " +
+
+            "Welcome to Livestock 360. " +
+
+            "You have " +
+            animalCount +
+            " animals registered. " +
+
+            "You have " +
+            reportCount +
+            " health reports. " +
+
+            "You have " +
+            pendingCount +
+            " pending reports. " +
+
+            "You can register livestock, " +
+            "check animal health, " +
+            "report symptoms, " +
+            "and view health alerts.";
+
+    }
+
+
+    /* =====================================================
+       TELUGU
+       ===================================================== */
+
+    else if (
+        selectedLanguage === "te-IN"
+    ) {
+
+        message =
+            "నమస్కారం " +
+            username +
+            ". " +
+
+            "లైవ్‌స్టాక్ త్రీ సిక్స్టీకి " +
+            "స్వాగతం. " +
+
+            "మీ వద్ద " +
+            animalCount +
+            " జంతువులు నమోదు చేయబడ్డాయి. " +
+
+            "మీ వద్ద " +
+            reportCount +
+            " ఆరోగ్య నివేదికలు ఉన్నాయి. " +
+
+            "మీ వద్ద " +
+            pendingCount +
+            " పెండింగ్ నివేదికలు ఉన్నాయి. " +
+
+            "మీరు పశువులను నమోదు చేయవచ్చు. " +
+
+            "జంతువుల ఆరోగ్యాన్ని తనిఖీ చేయవచ్చు. " +
+
+            "లక్షణాలను నివేదించవచ్చు. " +
+
+            "ఆరోగ్య హెచ్చరికలను చూడవచ్చు.";
+
+    }
+
+
+    /* =====================================================
+       HINDI
+       ===================================================== */
+
+    else if (
+        selectedLanguage === "hi-IN"
+    ) {
+
+        message =
+            "नमस्ते " +
+            username +
+            ". " +
+
+            "लाइवस्टॉक थ्री सिक्स्टी में " +
+            "आपका स्वागत है। " +
+
+            "आपके पास " +
+            animalCount +
+            " पंजीकृत पशु हैं। " +
+
+            "आपके पास " +
+            reportCount +
+            " स्वास्थ्य रिपोर्ट हैं। " +
+
+            "आपकी " +
+            pendingCount +
+            " रिपोर्ट लंबित हैं। " +
+
+            "आप पशुओं को पंजीकृत कर सकते हैं। " +
+
+            "पशुओं का स्वास्थ्य देख सकते हैं। " +
+
+            "लक्षणों की रिपोर्ट कर सकते हैं। " +
+
+            "और स्वास्थ्य अलर्ट देख सकते हैं।";
+
+    }
+
+
+    /* =====================================================
+       TAMIL
+       ===================================================== */
+
+    else if (
+        selectedLanguage === "ta-IN"
+    ) {
+
+        message =
+            "வணக்கம் " +
+            username +
+            ". " +
+
+            "லைவ்ஸ்டாக் த்ரீ சிக்ஸ்டிக்கு " +
+            "உங்களை வரவேற்கிறோம். " +
+
+            "உங்களிடம் " +
+            animalCount +
+            " பதிவு செய்யப்பட்ட கால்நடைகள் உள்ளன. " +
+
+            "உங்களிடம் " +
+            reportCount +
+            " சுகாதார அறிக்கைகள் உள்ளன. " +
+
+            pendingCount +
+            " அறிக்கைகள் நிலுவையில் உள்ளன. " +
+
+            "நீங்கள் கால்நடைகளை பதிவு செய்யலாம். " +
+
+            "விலங்குகளின் உடல்நலத்தை சரிபார்க்கலாம். " +
+
+            "அறிகுறிகளை தெரிவிக்கலாம். " +
+
+            "உடல்நல எச்சரிக்கைகளை பார்க்கலாம்.";
+
+    }
+
+
+    /* =====================================================
+       KANNADA
+       ===================================================== */
+
+    else if (
+        selectedLanguage === "kn-IN"
+    ) {
+
+        message =
+            "ನಮಸ್ಕಾರ " +
+            username +
+            ". " +
+
+            "ಲೈವ್‌ಸ್ಟಾಕ್ ತ್ರೀ ಸಿಕ್ಸ್ಟಿಗೆ " +
+            "ಸ್ವಾಗತ. " +
+
+            "ನಿಮ್ಮ ಬಳಿ " +
+            animalCount +
+            " ನೋಂದಾಯಿತ ಪ್ರಾಣಿಗಳಿವೆ. " +
+
+            "ನಿಮ್ಮ ಬಳಿ " +
+            reportCount +
+            " ಆರೋಗ್ಯ ವರದಿಗಳಿವೆ. " +
+
+            pendingCount +
+            " ವರದಿಗಳು ಬಾಕಿ ಇವೆ. " +
+
+            "ನೀವು ಜಾನುವಾರುಗಳನ್ನು ನೋಂದಾಯಿಸಬಹುದು. " +
+
+            "ಪ್ರಾಣಿಗಳ ಆರೋಗ್ಯವನ್ನು ಪರಿಶೀಲಿಸಬಹುದು. " +
+
+            "ಲಕ್ಷಣಗಳನ್ನು ವರದಿ ಮಾಡಬಹುದು. " +
+
+            "ಮತ್ತು ಆರೋಗ್ಯ ಎಚ್ಚರಿಕೆಗಳನ್ನು ನೋಡಬಹುದು.";
+
+    }
+
+
+    /*
+     * Start voice.
+     */
+
+    speakText(message);
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        selectedLanguage =
+            document.getElementById(
+                "languageSelect"
+            ).value;
+
+
+        loadBestVoice();
+
+
+        setTimeout(
+            function() {
+
+                loadBestVoice();
+
+            },
+            1000
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CHROME VOICE LIST
+   ========================================================= */
+
+if (
+    "speechSynthesis" in window
+) {
+
+    window.speechSynthesis.onvoiceschanged =
+        function() {
+
+            loadBestVoice();
+
+        };
+
+}
+
+</script>
+
+
+</body>
+
+</html>

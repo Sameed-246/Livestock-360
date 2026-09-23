@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#176b3a">
+
+    <title>Livestock 360°</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f8f1;
+            color: #183b22;
+        }
+
+        /* HEADER */
+
+        header {
+            background: #176b3a;
+            color: white;
+            padding: 14px 20px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-icon {
+            font-size: 30px;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .brand-small {
+            font-size: 10px;
+            opacity: .85;
+        }
+
+        .language {
+            border: none;
+            border-radius: 20px;
+            padding: 9px 13px;
+
+            color: #176b3a;
+            background: white;
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            margin: auto;
+            padding: 22px 18px 50px;
+        }
+
+        .back {
+            display: inline-block;
+
+            color: #176b3a;
+
+            text-decoration: none;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            margin-bottom: 20px;
+        }
+
+        /* HEADING */
+
+        .heading {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .heading-icon {
+            font-size: 55px;
+            margin-bottom: 5px;
+        }
+
+        .heading h1 {
+            color: #176b3a;
+            font-size: 27px;
+        }
+
+        .heading p {
+            color: #68766d;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        /* CARD */
+
+        .form-card {
+            background: white;
+
+            padding: 23px 20px;
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 6px 25px rgba(0,0,0,.08);
+        }
+
+        /* VOICE */
+
+        .voice-button {
+            width: 100%;
+
+            border: none;
+            border-radius: 13px;
+
+            padding: 13px;
+
+            background: #e8f5e5;
+            color: #176b3a;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-bottom: 20px;
+        }
+
+        /* QUESTION */
+
+        .question {
+            margin-bottom: 22px;
+        }
+
+        .question-label {
+            display: block;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+        /* ANIMAL TYPES */
+
+        .animal-types {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+        }
+
+        .animal-choice {
+            border: 2px solid #dce8dc;
+
+            border-radius: 15px;
+
+            padding: 15px 10px;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            background: #fafcf9;
+
+            font-size: 14px;
+
+            transition: .2s;
+        }
+
+        .animal-choice:hover {
+            border-color: #176b3a;
+        }
+
+        .animal-choice.selected {
+            border-color: #176b3a;
+            background: #e8f5e5;
+        }
+
+        .animal-choice input {
+            display: none;
+        }
+
+        .animal-choice .emoji {
+            display: block;
+            font-size: 35px;
+            margin-bottom: 5px;
+        }
+
+        /* FIELDS */
+
+        .field {
+            margin-bottom: 19px;
+        }
+
+        .field label {
+            display: block;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+
+            padding: 14px;
+
+            border: 2px solid #dce8dc;
+
+            border-radius: 12px;
+
+            font-size: 16px;
+
+            background: white;
+
+            outline: none;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: #176b3a;
+        }
+
+        .hint {
+            color: #778179;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        /* VACCINATION */
+
+        .vaccination-box {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            background: #f5faf3;
+
+            padding: 15px;
+
+            border-radius: 14px;
+
+            cursor: pointer;
+        }
+
+        .vaccination-box input {
+            width: 25px;
+            height: 25px;
+
+            accent-color: #176b3a;
+        }
+
+        .vaccination-text strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .vaccination-text span {
+            display: block;
+
+            font-size: 11px;
+
+            color: #68766d;
+
+            margin-top: 3px;
+        }
+
+        /* BUTTON */
+
+        .save-button {
+            width: 100%;
+
+            border: none;
+
+            border-radius: 15px;
+
+            padding: 17px;
+
+            background: #176b3a;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 5px;
+        }
+
+        .save-button:hover {
+            background: #12572f;
+        }
+
+        /* ERRORS */
+
+        .error {
+            background: #fff0f0;
+
+            color: #a32929;
+
+            padding: 9px;
+
+            border-radius: 9px;
+
+            font-size: 12px;
+
+            margin-top: 6px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 450px) {
+
+            .container {
+                padding: 18px 14px 40px;
+            }
+
+            .form-card {
+                padding: 20px 15px;
+            }
+
+            .heading h1 {
+                font-size: 24px;
+            }
+
+            .animal-choice {
+                padding: 13px 7px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header>
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🐄
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                Livestock 360°
+            </div>
+
+            <div class="brand-small" id="brandSmall">
+                Farmer Health Assistant
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <select
+        class="language"
+        id="language"
+        onchange="changeLanguage()"
+    >
+
+        <option value="en">🌐 English</option>
+
+        <option value="te">తెలుగు</option>
+
+        <option value="hi">हिंदी</option>
+
+        <option value="ta">தமிழ்</option>
+
+        <option value="kn">ಕನ್ನಡ</option>
+
+    </select>
+
+</header>
+
+
+
+<main class="container">
+
+
+    <!-- BACK -->
+
+    <a
+        href="{% url 'farmer_dashboard' %}"
+        class="back"
+        id="backText"
+    >
+        ← Back to Dashboard
+    </a>
+
+
+
+    <!-- HEADING -->
+
+    <div class="heading">
+
+        <div class="heading-icon">
+            🐄
+        </div>
+
+        <h1 id="pageTitle">
+            Add My Animal
+        </h1>
+
+        <p id="pageSubtitle">
+            Tell us a few simple details about your animal.
+        </p>
+
+    </div>
+
+
+
+    <!-- FORM CARD -->
+
+    <div class="form-card">
+
+
+        <!-- VOICE -->
+
+        <button
+            type="button"
+            class="voice-button"
+            onclick="speakInstructions()"
+            id="voiceButton"
+        >
+            🔊 Hear Instructions
+        </button>
+
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+
+            <!-- ANIMAL TYPE -->
+
+            <div class="question">
+
+                <span
+                    class="question-label"
+                    id="animalQuestion"
+                >
+                    1️⃣ What animal do you have?
+                </span>
+
+
+                <div class="animal-types">
+
+
+                    <label class="animal-choice">
+
+                        <input
+                            type="radio"
+                            name="animal_type"
+                            value="Cattle"
+                            required
+                        >
+
+                        <span class="emoji">
+                            🐄
+                        </span>
+
+                        <span id="cowText">
+                            Cow
+                        </span>
+
+                    </label>
+
+
+
+                    <label class="animal-choice">
+
+                        <input
+                            type="radio"
+                            name="animal_type"
+                            value="Buffalo"
+                        >
+
+                        <span class="emoji">
+                            🐃
+                        </span>
+
+                        <span id="buffaloText">
+                            Buffalo
+                        </span>
+
+                    </label>
+
+
+
+                    <label class="animal-choice">
+
+                        <input
+                            type="radio"
+                            name="animal_type"
+                            value="Goat"
+                        >
+
+                        <span class="emoji">
+                            🐐
+                        </span>
+
+                        <span id="goatText">
+                            Goat
+                        </span>
+
+                    </label>
+
+
+
+                    <label class="animal-choice">
+
+                        <input
+                            type="radio"
+                            name="animal_type"
+                            value="Sheep"
+                        >
+
+                        <span class="emoji">
+                            🐑
+                        </span>
+
+                        <span id="sheepText">
+                            Sheep
+                        </span>
+
+                    </label>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ANIMAL ID -->
+
+            <div class="field">
+
+                <label id="animalIdLabel">
+                    2️⃣ Animal ID / Name
+                </label>
+
+                {{ form.animal_id }}
+
+                <div
+                    class="hint"
+                    id="animalIdHint"
+                >
+                    Example: COW001 or Lakshmi
+                </div>
+
+
+                {% for error in form.animal_id.errors %}
+
+                    <div class="error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- BREED -->
+
+            <div class="field">
+
+                <label id="breedLabel">
+                    3️⃣ Breed
+                </label>
+
+                {{ form.breed }}
+
+                <div
+                    class="hint"
+                    id="breedHint"
+                >
+                    Example: Gir, Jersey, Murrah
+                </div>
+
+
+                {% for error in form.breed.errors %}
+
+                    <div class="error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- AGE -->
+
+            <div class="field">
+
+                <label id="ageLabel">
+                    4️⃣ Age
+                </label>
+
+                {{ form.age }}
+
+                <div
+                    class="hint"
+                    id="ageHint"
+                >
+                    Enter age in years
+                </div>
+
+
+                {% for error in form.age.errors %}
+
+                    <div class="error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- GENDER -->
+
+            <div class="field">
+
+                <label id="genderLabel">
+                    5️⃣ Gender
+                </label>
+
+                {{ form.gender }}
+
+                {% for error in form.gender.errors %}
+
+                    <div class="error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- VACCINATION -->
+
+            <div class="question">
+
+                <span
+                    class="question-label"
+                    id="vaccinationQuestion"
+                >
+                    6️⃣ Vaccination
+                </span>
+
+
+                <label class="vaccination-box">
+
+                    {{ form.vaccination_status }}
+
+                    <div class="vaccination-text">
+
+                        <strong id="vaccinationTitle">
+                            💉 My animal is vaccinated
+                        </strong>
+
+                        <span id="vaccinationHint">
+                            Tick this if vaccination is up to date.
+                        </span>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+
+
+            <!-- SAVE -->
+
+            <button
+                type="submit"
+                class="save-button"
+                id="saveButton"
+            >
+                💾 Save My Animal
+            </button>
+
+
+        </form>
+
+    </div>
+
+</main>
+
+
+
+<script>
+
+
+/* =========================================
+   TRANSLATIONS
+========================================= */
+
+const translations = {
+
+    en: {
+
+        brandSmall:
+            "Farmer Health Assistant",
+
+        back:
+            "← Back to Dashboard",
+
+        title:
+            "Add My Animal",
+
+        subtitle:
+            "Tell us a few simple details about your animal.",
+
+        voice:
+            "🔊 Hear Instructions",
+
+        animalQuestion:
+            "1️⃣ What animal do you have?",
+
+        cow:
+            "Cow",
+
+        buffalo:
+            "Buffalo",
+
+        goat:
+            "Goat",
+
+        sheep:
+            "Sheep",
+
+        animalId:
+            "2️⃣ Animal ID / Name",
+
+        animalIdHint:
+            "Example: COW001 or Lakshmi",
+
+        breed:
+            "3️⃣ Breed",
+
+        breedHint:
+            "Example: Gir, Jersey, Murrah",
+
+        age:
+            "4️⃣ Age",
+
+        ageHint:
+            "Enter age in years",
+
+        gender:
+            "5️⃣ Gender",
+
+        vaccination:
+            "6️⃣ Vaccination",
+
+        vaccinationTitle:
+            "💉 My animal is vaccinated",
+
+        vaccinationHint:
+            "Tick this if vaccination is up to date.",
+
+        save:
+            "💾 Save My Animal"
+
+    },
+
+
+    te: {
+
+        brandSmall:
+            "రైతుల ఆరోగ్య సహాయకుడు",
+
+        back:
+            "← డాష్‌బోర్డ్‌కు తిరిగి వెళ్ళండి",
+
+        title:
+            "నా పశువును జోడించండి",
+
+        subtitle:
+            "మీ పశువు గురించి కొన్ని వివరాలు చెప్పండి.",
+
+        voice:
+            "🔊 సూచనలు వినండి",
+
+        animalQuestion:
+            "1️⃣ మీ దగ్గర ఏ పశువు ఉంది?",
+
+        cow:
+            "ఆవు",
+
+        buffalo:
+            "గేదె",
+
+        goat:
+            "మేక",
+
+        sheep:
+            "గొర్రె",
+
+        animalId:
+            "2️⃣ పశువు ID / పేరు",
+
+        animalIdHint:
+            "ఉదాహరణ: COW001 లేదా లక్ష్మి",
+
+        breed:
+            "3️⃣ జాతి",
+
+        breedHint:
+            "ఉదాహరణ: గిర్, జెర్సీ, ముర్రా",
+
+        age:
+            "4️⃣ వయస్సు",
+
+        ageHint:
+            "వయస్సును సంవత్సరాలలో నమోదు చేయండి",
+
+        gender:
+            "5️⃣ లింగం",
+
+        vaccination:
+            "6️⃣ టీకాలు",
+
+        vaccinationTitle:
+            "💉 నా పశువుకు టీకాలు వేశారు",
+
+        vaccinationHint:
+            "టీకాలు తాజాగా ఉంటే దీనిని ఎంచుకోండి.",
+
+        save:
+            "💾 నా పశువును సేవ్ చేయండి"
+
+    },
+
+
+    hi: {
+
+        brandSmall:
+            "किसान स्वास्थ्य सहायक",
+
+        back:
+            "← डैशबोर्ड पर वापस जाएं",
+
+        title:
+            "मेरा पशु जोड़ें",
+
+        subtitle:
+            "अपने पशु के बारे में कुछ आसान जानकारी दें।",
+
+        voice:
+            "🔊 निर्देश सुनें",
+
+        animalQuestion:
+            "1️⃣ आपके पास कौन सा पशु है?",
+
+        cow:
+            "गाय",
+
+        buffalo:
+            "भैंस",
+
+        goat:
+            "बकरी",
+
+        sheep:
+            "भेड़",
+
+        animalId:
+            "2️⃣ पशु ID / नाम",
+
+        animalIdHint:
+            "उदाहरण: COW001 या लक्ष्मी",
+
+        breed:
+            "3️⃣ नस्ल",
+
+        breedHint:
+            "उदाहरण: गिर, जर्सी, मुर्रा",
+
+        age:
+            "4️⃣ उम्र",
+
+        ageHint:
+            "उम्र वर्षों में दर्ज करें",
+
+        gender:
+            "5️⃣ लिंग",
+
+        vaccination:
+            "6️⃣ टीकाकरण",
+
+        vaccinationTitle:
+            "💉 मेरे पशु का टीकाकरण हुआ है",
+
+        vaccinationHint:
+            "यदि टीकाकरण पूरा है तो इसे चुनें।",
+
+        save:
+            "💾 मेरा पशु सेव करें"
+
+    },
+
+
+    ta: {
+
+        brandSmall:
+            "விவசாயி சுகாதார உதவியாளர்",
+
+        back:
+            "← டாஷ்போர்டுக்குத் திரும்பு",
+
+        title:
+            "என் விலங்கைச் சேர்க்கவும்",
+
+        subtitle:
+            "உங்கள் விலங்கைப் பற்றி சில எளிய விவரங்களைச் சொல்லுங்கள்.",
+
+        voice:
+            "🔊 வழிமுறைகளைக் கேளுங்கள்",
+
+        animalQuestion:
+            "1️⃣ உங்களிடம் எந்த விலங்கு உள்ளது?",
+
+        cow:
+            "மாடு",
+
+        buffalo:
+            "எருமை",
+
+        goat:
+            "ஆடு",
+
+        sheep:
+            "செம்மறியாடு",
+
+        animalId:
+            "2️⃣ விலங்கு ID / பெயர்",
+
+        animalIdHint:
+            "உதாரணம்: COW001 அல்லது லட்சுமி",
+
+        breed:
+            "3️⃣ இனம்",
+
+        breedHint:
+            "உதாரணம்: கிர், ஜெர்சி, முர்ரா",
+
+        age:
+            "4️⃣ வயது",
+
+        ageHint:
+            "வயதை ஆண்டுகளில் உள்ளிடவும்",
+
+        gender:
+            "5️⃣ பாலினம்",
+
+        vaccination:
+            "6️⃣ தடுப்பூசி",
+
+        vaccinationTitle:
+            "💉 என் விலங்கிற்கு தடுப்பூசி போடப்பட்டுள்ளது",
+
+        vaccinationHint:
+            "தடுப்பூசி புதுப்பிக்கப்பட்டிருந்தால் இதைத் தேர்ந்தெடுக்கவும்.",
+
+        save:
+            "💾 என் விலங்கைச் சேமிக்கவும்"
+
+    },
+
+
+    kn: {
+
+        brandSmall:
+            "ರೈತರ ಆರೋಗ್ಯ ಸಹಾಯಕ",
+
+        back:
+            "← ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಹಿಂತಿರುಗಿ",
+
+        title:
+            "ನನ್ನ ಪ್ರಾಣಿಯನ್ನು ಸೇರಿಸಿ",
+
+        subtitle:
+            "ನಿಮ್ಮ ಪ್ರಾಣಿಯ ಬಗ್ಗೆ ಕೆಲವು ಸರಳ ವಿವರಗಳನ್ನು ನೀಡಿ.",
+
+        voice:
+            "🔊 ಸೂಚನೆಗಳನ್ನು ಕೇಳಿ",
+
+        animalQuestion:
+            "1️⃣ ನಿಮ್ಮ ಬಳಿ ಯಾವ ಪ್ರಾಣಿ ಇದೆ?",
+
+        cow:
+            "ಹಸು",
+
+        buffalo:
+            "ಎಮ್ಮೆ",
+
+        goat:
+            "ಮೇಕೆ",
+
+        sheep:
+            "ಕುರಿ",
+
+        animalId:
+            "2️⃣ ಪ್ರಾಣಿ ID / ಹೆಸರು",
+
+        animalIdHint:
+            "ಉದಾಹರಣೆ: COW001 ಅಥವಾ ಲಕ್ಷ್ಮಿ",
+
+        breed:
+            "3️⃣ ತಳಿ",
+
+        breedHint:
+            "ಉದಾಹರಣೆ: ಗಿರ್, ಜರ್ಸಿ, ಮುರ್ರಾ",
+
+        age:
+            "4️⃣ ವಯಸ್ಸು",
+
+        ageHint:
+            "ವಯಸ್ಸನ್ನು ವರ್ಷಗಳಲ್ಲಿ ನಮೂದಿಸಿ",
+
+        gender:
+            "5️⃣ ಲಿಂಗ",
+
+        vaccination:
+            "6️⃣ ಲಸಿಕೆ",
+
+        vaccinationTitle:
+            "💉 ನನ್ನ ಪ್ರಾಣಿಗೆ ಲಸಿಕೆ ಹಾಕಲಾಗಿದೆ",
+
+        vaccinationHint:
+            "ಲಸಿಕೆ ನವೀಕೃತವಾಗಿದ್ದರೆ ಇದನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+
+        save:
+            "💾 ನನ್ನ ಪ್ರಾಣಿಯನ್ನು ಉಳಿಸಿ"
+
+    }
+
+};
+
+
+
+/* =========================================
+   CHANGE LANGUAGE
+========================================= */
+
+function changeLanguage() {
+
+    const language =
+        document.getElementById("language").value;
+
+    const t =
+        translations[language];
+
+
+    document.getElementById("brandSmall").textContent =
+        t.brandSmall;
+
+    document.getElementById("backText").textContent =
+        t.back;
+
+    document.getElementById("pageTitle").textContent =
+        t.title;
+
+    document.getElementById("pageSubtitle").textContent =
+        t.subtitle;
+
+    document.getElementById("voiceButton").textContent =
+        t.voice;
+
+    document.getElementById("animalQuestion").textContent =
+        t.animalQuestion;
+
+    document.getElementById("cowText").textContent =
+        t.cow;
+
+    document.getElementById("buffaloText").textContent =
+        t.buffalo;
+
+    document.getElementById("goatText").textContent =
+        t.goat;
+
+    document.getElementById("sheepText").textContent =
+        t.sheep;
+
+    document.getElementById("animalIdLabel").textContent =
+        t.animalId;
+
+    document.getElementById("animalIdHint").textContent =
+        t.animalIdHint;
+
+    document.getElementById("breedLabel").textContent =
+        t.breed;
+
+    document.getElementById("breedHint").textContent =
+        t.breedHint;
+
+    document.getElementById("ageLabel").textContent =
+        t.age;
+
+    document.getElementById("ageHint").textContent =
+        t.ageHint;
+
+    document.getElementById("genderLabel").textContent =
+        t.gender;
+
+    document.getElementById("vaccinationQuestion").textContent =
+        t.vaccination;
+
+    document.getElementById("vaccinationTitle").textContent =
+        t.vaccinationTitle;
+
+    document.getElementById("vaccinationHint").textContent =
+        t.vaccinationHint;
+
+    document.getElementById("saveButton").textContent =
+        t.save;
+
+
+    /* Save language */
+
+    localStorage.setItem(
+        "livestock_language",
+        language
+    );
+
+
+    /* Voice language */
+
+    document.documentElement.lang =
+        language;
+
+}
+
+
+
+/* =========================================
+   LOAD SAVED LANGUAGE
+========================================= */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const savedLanguage =
+            localStorage.getItem(
+                "livestock_language"
+            );
+
+
+        if (savedLanguage) {
+
+            document.getElementById(
+                "language"
+            ).value = savedLanguage;
+
+        }
+
+
+        changeLanguage();
+
+    }
+);
+
+
+
+/* =========================================
+   ANIMAL CARD SELECTION
+========================================= */
+
+const choices =
+    document.querySelectorAll(
+        ".animal-choice"
+    );
+
+
+choices.forEach(function(choice) {
+
+    choice.addEventListener(
+        "click",
+        function() {
+
+            choices.forEach(
+                function(item) {
+
+                    item.classList.remove(
+                        "selected"
+                    );
+
+                }
+            );
+
+
+            choice.classList.add(
+                "selected"
+            );
+
+        }
+    );
+
+});
+
+
+
+/* =========================================
+   VOICE INSTRUCTIONS
+========================================= */
+
+function speakInstructions() {
+
+    const language =
+        document.getElementById(
+            "language"
+        ).value;
+
+
+    const messages = {
+
+        en:
+        "Please select your animal. Enter the animal name, breed and age. Select the gender and vaccination status. Finally press Save My Animal.",
+
+        te:
+        "దయచేసి మీ పశువును ఎంచుకోండి. పశువు పేరు, జాతి మరియు వయస్సును నమోదు చేయండి. లింగం మరియు టీకా వివరాలను ఎంచుకోండి. చివరగా నా పశువును సేవ్ చేయండి అనే బటన్‌ను నొక్కండి.",
+
+        hi:
+        "कृपया अपना पशु चुनें। पशु का नाम, नस्ल और उम्र दर्ज करें। लिंग और टीकाकरण की जानकारी चुनें। अंत में मेरा पशु सेव करें बटन दबाएं।",
+
+        ta:
+        "உங்கள் விலங்கைத் தேர்ந்தெடுக்கவும். விலங்கின் பெயர், இனம் மற்றும் வயதை உள்ளிடவும். பாலினம் மற்றும் தடுப்பூசி தகவலைத் தேர்ந்தெடுக்கவும். இறுதியாக என் விலங்கைச் சேமிக்கவும் என்ற பொத்தானை அழுத்தவும்.",
+
+        kn:
+        "ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪ್ರಾಣಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಪ್ರಾಣಿಯ ಹೆಸರು, ತಳಿ ಮತ್ತು ವಯಸ್ಸನ್ನು ನಮೂದಿಸಿ. ಲಿಂಗ ಮತ್ತು ಲಸಿಕೆ ಮಾಹಿತಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಕೊನೆಯಲ್ಲಿ ನನ್ನ ಪ್ರಾಣಿಯನ್ನು ಉಳಿಸಿ ಬಟನ್ ಒತ್ತಿರಿ."
+
+    };
+
+
+    const speech =
+        new SpeechSynthesisUtterance(
+            messages[language]
+        );
+
+
+    speech.lang =
+
+        language === "te"
+            ? "te-IN"
+
+        : language === "hi"
+            ? "hi-IN"
+
+        : language === "ta"
+            ? "ta-IN"
+
+        : language === "kn"
+            ? "kn-IN"
+
+        : "en-IN";
+
+
+    window.speechSynthesis.cancel();
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>

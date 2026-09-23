@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ animal.animal_id }} | Livestock 360°</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+            color: #17351f;
+        }
+
+        header {
+            background: #166534;
+            color: white;
+            padding: 17px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 28px auto;
+            padding: 0 18px;
+        }
+
+        .animal-header {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            margin-bottom: 22px;
+        }
+
+        .animal-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .animal-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: #dcfce7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .animal-title h1 {
+            margin: 0 0 5px;
+            font-size: 26px;
+        }
+
+        .animal-title p {
+            margin: 0;
+            color: #66756b;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .detail {
+            background: #f7faf7;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #748078;
+            margin-bottom: 6px;
+        }
+
+        .detail-value {
+            font-weight: bold;
+        }
+
+        .vaccinated {
+            color: #15803d;
+        }
+
+        .not-vaccinated {
+            color: #dc2626;
+        }
+
+        .section-title {
+            margin: 25px 0 14px;
+            font-size: 21px;
+        }
+
+        .report {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+            border-left: 5px solid #9ca3af;
+        }
+
+        .report.high {
+            border-left-color: #dc2626;
+        }
+
+        .report.medium {
+            border-left-color: #f59e0b;
+        }
+
+        .report.low {
+            border-left-color: #16a34a;
+        }
+
+        .report-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .report-date {
+            color: #7a867e;
+            font-size: 13px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #eef2f0;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-reviewed {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .symptoms {
+            color: #405047;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .ai-box {
+            background: #f7faf7;
+            border-radius: 12px;
+            padding: 13px 15px;
+            margin-top: 12px;
+        }
+
+        .ai-label {
+            font-size: 12px;
+            color: #718078;
+            margin-bottom: 5px;
+        }
+
+        .ai-value {
+            font-weight: bold;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 9px 14px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .report-button {
+            background: #166534;
+            color: white;
+        }
+
+        .dashboard-button {
+            background: #e8f2ea;
+            color: #166534;
+        }
+
+        .empty {
+            background: white;
+            padding: 40px 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .empty-icon {
+            font-size: 45px;
+        }
+
+        @media (max-width: 700px) {
+
+            .details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .report-top {
+                flex-direction: column;
+            }
+
+        }
+
+        @media (max-width: 450px) {
+
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 12px;
+            }
+
+            .animal-title h1 {
+                font-size: 22px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="brand">
+        🐄 Livestock 360°
+    </div>
+
+    <a
+        href="{% url 'animal_list' %}"
+        class="back"
+    >
+        ← My Animals
+    </a>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- ANIMAL SUMMARY -->
+
+    <section class="animal-header">
+
+        <div class="animal-title">
+
+            <div class="animal-icon">
+
+                {% if animal.animal_type == 'Cattle' %}
+                    🐄
+                {% elif animal.animal_type == 'Buffalo' %}
+                    🐃
+                {% elif animal.animal_type == 'Goat' %}
+                    🐐
+                {% elif animal.animal_type == 'Sheep' %}
+                    🐑
+                {% else %}
+                    🐾
+                {% endif %}
+
+            </div>
+
+            <div>
+
+                <h1>
+                    {{ animal.animal_id }}
+                </h1>
+
+                <p>
+                    {{ animal.animal_type }} · {{ animal.breed }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="details">
+
+            <div class="detail">
+
+                <div class="detail-label">
+                    Animal Type
+                </div>
+
+                <div class="detail-value">
+                    {{ animal.animal_type }}
+                </div>
+
+            </div>
+
+
+            <div class="detail">
+
+                <div class="detail-label">
+                    Age
+                </div>
+
+                <div class="detail-value">
+                    {{ animal.age }} years
+                </div>
+
+            </div>
+
+
+            <div class="detail">
+
+                <div class="detail-label">
+                    Gender
+                </div>
+
+                <div class="detail-value">
+                    {{ animal.gender }}
+                </div>
+
+            </div>
+
+
+            <div class="detail">
+
+                <div class="detail-label">
+                    Vaccination
+                </div>
+
+                <div
+                    class="detail-value
+                    {% if animal.vaccination_status %}
+                        vaccinated
+                    {% else %}
+                        not-vaccinated
+                    {% endif %}"
+                >
+
+                    {% if animal.vaccination_status %}
+                        ✓ Vaccinated
+                    {% else %}
+                        ⚠ Not Vaccinated
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- HEALTH HISTORY -->
+
+    <h2 class="section-title">
+        🩺 Health History
+    </h2>
+
+
+    {% if reports %}
+
+        {% for report in reports %}
+
+            <article
+                class="report
+                {% if report.risk_score >= 70 %}
+                    high
+                {% elif report.risk_score >= 40 %}
+                    medium
+                {% elif report.risk_score %}
+                    low
+                {% endif %}"
+            >
+
+                <div class="report-top">
+
+                    <strong>
+                        Health Report #{{ report.id }}
+                    </strong>
+
+                    <span class="report-date">
+                        {{ report.created_at|date:"d M Y, h:i A" }}
+                    </span>
+
+                </div>
+
+
+                <span
+                    class="status
+                    {% if report.status == 'Pending' %}
+                        status-pending
+                    {% elif report.status == 'Reviewed' %}
+                        status-reviewed
+                    {% elif report.status == 'Resolved' %}
+                        status-resolved
+                    {% endif %}"
+                >
+                    {{ report.status }}
+                </span>
+
+
+                <div class="symptoms">
+
+                    <strong>
+                        Symptoms:
+                    </strong>
+
+                    {{ report.symptoms }}
+
+                </div>
+
+
+                {% if report.temperature %}
+
+                    <div class="symptoms">
+
+                        🌡️
+                        <strong>
+                            Temperature:
+                        </strong>
+
+                        {{ report.temperature }}°F
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="ai-box">
+
+                    <div class="ai-label">
+                        AI Health Assessment
+                    </div>
+
+
+                    {% if report.risk_score %}
+
+                        <div class="ai-value">
+
+                            Risk Score:
+                            {{ report.risk_score }}%
+
+                            <br>
+
+                            Possible Condition:
+                            {{ report.predicted_disease|default:"Under review" }}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="ai-value">
+                            AI assessment pending
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                {% if report.location_address %}
+
+                    <div class="symptoms">
+
+                        📍
+                        <strong>
+                            Location:
+                        </strong>
+
+                        {{ report.location_address }}
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="action-row">
+
+                    <a
+                        href="{% url 'report_success' report.id %}"
+                        class="button report-button"
+                    >
+                        View Report
+                    </a>
+
+                </div>
+
+            </article>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                🩺
+            </div>
+
+            <h3>
+                No health reports yet
+            </h3>
+
+            <p>
+                This animal has no reported health problems.
+            </p>
+
+            <a
+                href="{% url 'report_problem' %}"
+                class="button report-button"
+            >
+                Report a Health Problem
+            </a>
+
+        </div>
+
+    {% endif %}
+
+
+    <div class="action-row">
+
+        <a
+            href="{% url 'animal_list' %}"
+            class="button dashboard-button"
+        >
+            ← Back to My Animals
+        </a>
+
+        <a
+            href="{% url 'report_problem' %}"
+            class="button report-button"
+        >
+            + New Health Report
+        </a>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

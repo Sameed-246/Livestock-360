@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Login | Livestock 360°
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef8f1,
+                    #f8fcf9
+                );
+            color: #18352a;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================== */
+
+        .header {
+            background: #137a46;
+            color: white;
+            padding: 17px 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow:
+                0 3px 15px rgba(
+                    0,
+                    0,
+                    0,
+                    0.10
+                );
+        }
+
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+
+            background: white;
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 26px;
+        }
+
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+
+        .brand-subtitle {
+            margin-top: 2px;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+
+        .language-select {
+            border: none;
+            outline: none;
+
+            background: white;
+            color: #137a46;
+
+            padding: 10px 14px;
+
+            border-radius: 25px;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           PAGE
+        ========================== */
+
+        .page {
+            min-height:
+                calc(100vh - 82px);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 35px 20px;
+        }
+
+
+        .login-container {
+            width: 100%;
+            max-width: 460px;
+        }
+
+
+        /* =========================
+           LOGIN CARD
+        ========================== */
+
+        .login-card {
+            background: white;
+
+            border-radius: 24px;
+
+            padding: 38px;
+
+            box-shadow:
+                0 15px 45px
+                rgba(
+                    21,
+                    75,
+                    48,
+                    0.10
+                );
+        }
+
+
+        .login-icon {
+            width: 76px;
+            height: 76px;
+
+            margin: 0 auto 18px;
+
+            border-radius: 22px;
+
+            background: #eaf7ef;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 42px;
+        }
+
+
+        .login-title {
+            text-align: center;
+
+            margin: 0;
+
+            font-size: 30px;
+
+            color: #123c2b;
+        }
+
+
+        .login-description {
+            text-align: center;
+
+            margin: 9px 0 30px;
+
+            color: #708078;
+
+            font-size: 15px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           FORM
+        ========================== */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+
+        .form-label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #244638;
+
+            font-size: 14px;
+
+            font-weight: 800;
+        }
+
+
+        .form-input {
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border:
+                1px solid #d8e7de;
+
+            border-radius: 12px;
+
+            background: #fbfdfc;
+
+            color: #18352a;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.2s ease;
+        }
+
+
+        .form-input:focus {
+            border-color: #137a46;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    19,
+                    122,
+                    70,
+                    0.10
+                );
+        }
+
+
+        .form-input::placeholder {
+            color: #9aa9a2;
+        }
+
+
+        /* =========================
+           ERRORS
+        ========================== */
+
+        .error-box {
+            background: #fff1f1;
+
+            border:
+                1px solid #f0cccc;
+
+            color: #a62b2b;
+
+            border-radius: 12px;
+
+            padding: 13px 15px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        .field-error {
+            margin-top: 7px;
+
+            color: #b52e2e;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           LOGIN BUTTON
+        ========================== */
+
+        .login-button {
+            width: 100%;
+
+            border: none;
+
+            background: #137a46;
+            color: white;
+
+            padding: 14px 18px;
+
+            border-radius: 13px;
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+
+        .login-button:hover {
+            background: #0f653a;
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 7px 18px
+                rgba(
+                    19,
+                    122,
+                    70,
+                    0.20
+                );
+        }
+
+
+        .login-button:active {
+            transform:
+                translateY(0);
+        }
+
+
+        /* =========================
+           REGISTER
+        ========================== */
+
+        .register-section {
+            margin-top: 25px;
+
+            padding-top: 22px;
+
+            border-top:
+                1px solid #e8efeb;
+
+            text-align: center;
+        }
+
+
+        .register-text {
+            color: #718078;
+
+            font-size: 14px;
+        }
+
+
+        .register-link {
+            display: inline-block;
+
+            margin-top: 8px;
+
+            color: #137a46;
+
+            font-weight: 800;
+
+            text-decoration: none;
+
+            font-size: 15px;
+        }
+
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           SECURITY NOTE
+        ========================== */
+
+        .security-note {
+            margin-top: 22px;
+
+            padding: 13px 15px;
+
+            border-radius: 12px;
+
+            background: #f3f8f5;
+
+            color: #63766d;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+            text-align: center;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================== */
+
+        .footer {
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #829189;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 14px 16px;
+            }
+
+
+            .brand-name {
+                font-size: 18px;
+            }
+
+
+            .brand-subtitle {
+                font-size: 11px;
+            }
+
+
+            .brand-icon {
+                width: 43px;
+                height: 43px;
+                font-size: 23px;
+            }
+
+
+            .language-select {
+                padding: 9px 10px;
+                font-size: 12px;
+            }
+
+
+            .page {
+                padding:
+                    25px 15px;
+            }
+
+
+            .login-card {
+                padding: 28px 21px;
+                border-radius: 20px;
+            }
+
+
+            .login-title {
+                font-size: 26px;
+            }
+
+
+            .login-description {
+                font-size: 14px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="header">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🐄
+            </div>
+
+            <div>
+
+                <div
+                    class="brand-name"
+                    data-i18n="brandName"
+                >
+                    Livestock 360°
+                </div>
+
+                <div
+                    class="brand-subtitle"
+                    data-i18n="brandSubtitle"
+                >
+                    Farmer Health Assistant
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <select
+            id="languageSelector"
+            class="language-select"
+            aria-label="Language"
+        >
+
+            <option value="English">
+                🌐 English
+            </option>
+
+            <option value="Telugu">
+                తెలుగు
+            </option>
+
+            <option value="Hindi">
+                हिंदी
+            </option>
+
+            <option value="Tamil">
+                தமிழ்
+            </option>
+
+            <option value="Kannada">
+                ಕನ್ನಡ
+            </option>
+
+        </select>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="page">
+
+        <div class="login-container">
+
+
+            <!-- LOGIN CARD -->
+
+            <div class="login-card">
+
+
+                <div class="login-icon">
+                    🔐
+                </div>
+
+
+                <h1
+                    class="login-title"
+                    data-i18n="title"
+                >
+                    Welcome Back
+                </h1>
+
+
+                <p
+                    class="login-description"
+                    data-i18n="description"
+                >
+                    Sign in to manage your livestock
+                    and monitor their health.
+                </p>
+
+
+                <!-- =========================
+                     DJANGO LOGIN FORM
+                ========================== -->
+
+                {% if form.errors %}
+
+                    <div class="error-box">
+
+                        <strong
+                            data-i18n="loginErrorTitle"
+                        >
+                            Login unsuccessful
+                        </strong>
+
+                        <br>
+
+                        <span
+                            data-i18n="loginErrorText"
+                        >
+                            Please check your username
+                            and password and try again.
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if next %}
+                    {% if user.is_authenticated %}
+
+                        <div class="error-box">
+
+                            <span
+                                data-i18n="permissionError"
+                            >
+                                Your account does not have
+                                permission to access that page.
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+                {% endif %}
+
+
+                <form
+                    method="post"
+                    action="{% url 'login' %}"
+                >
+
+                    {% csrf_token %}
+
+
+                    <!-- USERNAME -->
+
+                    <div class="form-group">
+
+                        <label
+                            for="id_username"
+                            class="form-label"
+                            data-i18n="username"
+                        >
+                            Username
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="username"
+                            id="id_username"
+                            class="form-input"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required
+                            autofocus
+                        >
+
+
+                        {% if form.username.errors %}
+
+                            <div class="field-error">
+
+                                {{ form.username.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="form-group">
+
+                        <label
+                            for="id_password"
+                            class="form-label"
+                            data-i18n="password"
+                        >
+                            Password
+                        </label>
+
+
+                        <input
+                            type="password"
+                            name="password"
+                            id="id_password"
+                            class="form-input"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+
+                        {% if form.password.errors %}
+
+                            <div class="field-error">
+
+                                {{ form.password.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- NEXT URL -->
+
+                    {% if next %}
+
+                        <input
+                            type="hidden"
+                            name="next"
+                            value="{{ next }}"
+                        >
+
+                    {% endif %}
+
+
+                    <!-- LOGIN -->
+
+                    <button
+                        type="submit"
+                        class="login-button"
+                        data-i18n="loginButton"
+                    >
+                        🔐 Login
+                    </button>
+
+                </form>
+
+
+                <!-- =========================
+                     REGISTER
+                ========================== -->
+
+                <div class="register-section">
+
+                    <div
+                        class="register-text"
+                        data-i18n="newFarmer"
+                    >
+                        New farmer?
+                    </div>
+
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="register-link"
+                        data-i18n="createAccount"
+                    >
+                        Create a new account →
+                    </a>
+
+                </div>
+
+
+                <!-- SECURITY -->
+
+                <div
+                    class="security-note"
+                    data-i18n="securityNote"
+                >
+                    🔒 Your livestock and health information
+                    is protected by your account.
+                </div>
+
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div
+                class="footer"
+                data-i18n="footer"
+            >
+                Livestock 360° · AI-powered livestock
+                health monitoring platform
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         LANGUAGE SYSTEM
+    ========================== -->
+
+    <script>
+
+        const languageSelector =
+            document.getElementById(
+                "languageSelector"
+            );
+
+
+        const translations = {
+
+            English: {
+
+                brandName:
+                    "Livestock 360°",
+
+                brandSubtitle:
+                    "Farmer Health Assistant",
+
+                title:
+                    "Welcome Back",
+
+                description:
+                    "Sign in to manage your livestock and monitor their health.",
+
+                username:
+                    "Username",
+
+                password:
+                    "Password",
+
+                usernamePlaceholder:
+                    "Enter your username",
+
+                passwordPlaceholder:
+                    "Enter your password",
+
+                loginButton:
+                    "🔐 Login",
+
+                loginErrorTitle:
+                    "Login unsuccessful",
+
+                loginErrorText:
+                    "Please check your username and password and try again.",
+
+                permissionError:
+                    "Your account does not have permission to access that page.",
+
+                newFarmer:
+                    "New farmer?",
+
+                createAccount:
+                    "Create a new account →",
+
+                securityNote:
+                    "🔒 Your livestock and health information is protected by your account.",
+
+                footer:
+                    "Livestock 360° · AI-powered livestock health monitoring platform"
+
+            },
+
+
+            Telugu: {
+
+                brandName:
+                    "Livestock 360°",
+
+                brandSubtitle:
+                    "రైతు ఆరోగ్య సహాయకుడు",
+
+                title:
+                    "తిరిగి స్వాగతం",
+
+                description:
+                    "మీ పశువులను నిర్వహించడానికి మరియు వాటి ఆరోగ్యాన్ని పర్యవేక్షించడానికి లాగిన్ చేయండి.",
+
+                username:
+                    "వినియోగదారు పేరు",
+
+                password:
+                    "పాస్‌వర్డ్",
+
+                usernamePlaceholder:
+                    "మీ వినియోగదారు పేరు నమోదు చేయండి",
+
+                passwordPlaceholder:
+                    "మీ పాస్‌వర్డ్ నమోదు చేయండి",
+
+                loginButton:
+                    "🔐 లాగిన్",
+
+                loginErrorTitle:
+                    "లాగిన్ విఫలమైంది",
+
+                loginErrorText:
+                    "మీ వినియోగదారు పేరు మరియు పాస్‌వర్డ్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.",
+
+                permissionError:
+                    "ఈ పేజీని యాక్సెస్ చేయడానికి మీ ఖాతాకు అనుమతి లేదు.",
+
+                newFarmer:
+                    "కొత్త రైతువా?",
+
+                createAccount:
+                    "కొత్త ఖాతాను సృష్టించండి →",
+
+                securityNote:
+                    "🔒 మీ పశువులు మరియు ఆరోగ్య సమాచారం మీ ఖాతా ద్వారా రక్షించబడుతుంది.",
+
+                footer:
+                    "Livestock 360° · AI ఆధారిత పశువుల ఆరోగ్య పర్యవేక్షణ వేదిక"
+
+            },
+
+
+            Hindi: {
+
+                brandName:
+                    "Livestock 360°",
+
+                brandSubtitle:
+                    "किसान स्वास्थ्य सहायक",
+
+                title:
+                    "वापसी पर स्वागत है",
+
+                description:
+                    "अपने पशुओं को प्रबंधित करने और उनके स्वास्थ्य की निगरानी करने के लिए लॉगिन करें।",
+
+                username:
+                    "उपयोगकर्ता नाम",
+
+                password:
+                    "पासवर्ड",
+
+                usernamePlaceholder:
+                    "अपना उपयोगकर्ता नाम दर्ज करें",
+
+                passwordPlaceholder:
+                    "अपना पासवर्ड दर्ज करें",
+
+                loginButton:
+                    "🔐 लॉगिन",
+
+                loginErrorTitle:
+                    "लॉगिन असफल",
+
+                loginErrorText:
+                    "कृपया अपना उपयोगकर्ता नाम और पासवर्ड जांचें और फिर प्रयास करें।",
+
+                permissionError:
+                    "आपके खाते को इस पेज को एक्सेस करने की अनुमति नहीं है।",
+
+                newFarmer:
+                    "नए किसान हैं?",
+
+                createAccount:
+                    "नया खाता बनाएं →",
+
+                securityNote:
+                    "🔒 आपके पशुओं और स्वास्थ्य की जानकारी आपके खाते द्वारा सुरक्षित है।",
+
+                footer:
+                    "Livestock 360° · AI आधारित पशु स्वास्थ्य निगरानी प्लेटफॉर्म"
+
+            },
+
+
+            Tamil: {
+
+                brandName:
+                    "Livestock 360°",
+
+                brandSubtitle:
+                    "விவசாயி சுகாதார உதவியாளர்",
+
+                title:
+                    "மீண்டும் வரவேற்கிறோம்",
+
+                description:
+                    "உங்கள் கால்நடைகளை நிர்வகிக்கவும் அவற்றின் ஆரோக்கியத்தை கண்காணிக்கவும் உள்நுழையவும்.",
+
+                username:
+                    "பயனர் பெயர்",
+
+                password:
+                    "கடவுச்சொல்",
+
+                usernamePlaceholder:
+                    "உங்கள் பயனர் பெயரை உள்ளிடவும்",
+
+                passwordPlaceholder:
+                    "உங்கள் கடவுச்சொல்லை உள்ளிடவும்",
+
+                loginButton:
+                    "🔐 உள்நுழைய",
+
+                loginErrorTitle:
+                    "உள்நுழைவு தோல்வியடைந்தது",
+
+                loginErrorText:
+                    "உங்கள் பயனர் பெயர் மற்றும் கடவுச்சொல்லை சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
+
+                permissionError:
+                    "இந்தப் பக்கத்தை அணுக உங்கள் கணக்கிற்கு அனுமதி இல்லை.",
+
+                newFarmer:
+                    "புதிய விவசாயியா?",
+
+                createAccount:
+                    "புதிய கணக்கை உருவாக்கவும் →",
+
+                securityNote:
+                    "🔒 உங்கள் கால்நடை மற்றும் சுகாதார தகவல்கள் உங்கள் கணக்கால் பாதுகாக்கப்படுகின்றன.",
+
+                footer:
+                    "Livestock 360° · AI அடிப்படையிலான கால்நடை சுகாதார கண்காணிப்பு தளம்"
+
+            },
+
+
+            Kannada: {
+
+                brandName:
+                    "Livestock 360°",
+
+                brandSubtitle:
+                    "ರೈತ ಆರೋಗ್ಯ ಸಹಾಯಕ",
+
+                title:
+                    "ಮತ್ತೆ ಸ್ವಾಗತ",
+
+                description:
+                    "ನಿಮ್ಮ ಜಾನುವಾರುಗಳನ್ನು ನಿರ್ವಹಿಸಲು ಮತ್ತು ಅವುಗಳ ಆರೋಗ್ಯವನ್ನು ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಲು ಲಾಗಿನ್ ಮಾಡಿ.",
+
+                username:
+                    "ಬಳಕೆದಾರ ಹೆಸರು",
+
+                password:
+                    "ಪಾಸ್‌ವರ್ಡ್",
+
+                usernamePlaceholder:
+                    "ನಿಮ್ಮ ಬಳಕೆದಾರ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
+
+                passwordPlaceholder:
+                    "ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ",
+
+                loginButton:
+                    "🔐 ಲಾಗಿನ್",
+
+                loginErrorTitle:
+                    "ಲಾಗಿನ್ ವಿಫಲವಾಗಿದೆ",
+
+                loginErrorText:
+                    "ನಿಮ್ಮ ಬಳಕೆದಾರ ಹೆಸರು ಮತ್ತು ಪಾಸ್‌ವರ್ಡ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+
+                permissionError:
+                    "ಈ ಪುಟವನ್ನು ಪ್ರವೇಶಿಸಲು ನಿಮ್ಮ ಖಾತೆಗೆ ಅನುಮತಿ ಇಲ್ಲ.",
+
+                newFarmer:
+                    "ಹೊಸ ರೈತರೇ?",
+
+                createAccount:
+                    "ಹೊಸ ಖಾತೆ ರಚಿಸಿ →",
+
+                securityNote:
+                    "🔒 ನಿಮ್ಮ ಜಾನುವಾರು ಮತ್ತು ಆರೋಗ್ಯ ಮಾಹಿತಿಯನ್ನು ನಿಮ್ಮ ಖಾತೆ ರಕ್ಷಿಸುತ್ತದೆ.",
+
+                footer:
+                    "Livestock 360° · AI ಆಧಾರಿತ ಜಾನುವಾರು ಆರೋಗ್ಯ ಮೇಲ್ವಿಚಾರಣಾ ವೇದಿಕೆ"
+
+            }
+
+        };
+
+
+        function applyLanguage(language) {
+
+            const t =
+                translations[language];
+
+            if (!t) {
+                return;
+            }
+
+
+            /*
+             * Replace normal text
+             */
+
+            document
+                .querySelectorAll("[data-i18n]")
+                .forEach(
+                    function(element) {
+
+                        const key =
+                            element.getAttribute(
+                                "data-i18n"
+                            );
+
+                        if (t[key]) {
+
+                            element.textContent =
+                                t[key];
+
+                        }
+
+                    }
+                );
+
+
+            /*
+             * Replace placeholders
+             */
+
+            const usernameInput =
+                document.getElementById(
+                    "id_username"
+                );
+
+            if (usernameInput) {
+
+                usernameInput.placeholder =
+                    t.usernamePlaceholder;
+
+            }
+
+
+            const passwordInput =
+                document.getElementById(
+                    "id_password"
+                );
+
+            if (passwordInput) {
+
+                passwordInput.placeholder =
+                    t.passwordPlaceholder;
+
+            }
+
+
+            /*
+             * Save language
+             */
+
+            localStorage.setItem(
+                "livestock_language",
+                language
+            );
+
+        }
+
+
+        /*
+         * Language selector
+         */
+
+        if (languageSelector) {
+
+            languageSelector.addEventListener(
+                "change",
+                function() {
+
+                    applyLanguage(
+                        this.value
+                    );
+
+                }
+            );
+
+
+            const savedLanguage =
+                localStorage.getItem(
+                    "livestock_language"
+                );
+
+
+            if (
+                savedLanguage &&
+                translations[savedLanguage]
+            ) {
+
+                languageSelector.value =
+                    savedLanguage;
+
+                applyLanguage(
+                    savedLanguage
+                );
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

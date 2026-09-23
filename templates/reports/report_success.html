@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Health Report | Livestock 360°</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f8f3;
+            color: #183b22;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #16833b;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .brand span {
+            color: #dff7e5;
+        }
+
+        .language {
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: auto;
+            padding: 25px 16px 40px;
+        }
+
+        .success-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 70px;
+            height: 70px;
+            margin: auto;
+            border-radius: 50%;
+            background: #dcf8e4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+        }
+
+        .success-title {
+            margin-top: 15px;
+            font-size: 27px;
+            color: #16833b;
+        }
+
+        .success-message {
+            margin-top: 8px;
+            color: #637266;
+            line-height: 1.6;
+        }
+
+        .report-id {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #f0f7f1;
+            font-weight: 700;
+        }
+
+        .ai-card {
+            margin-top: 22px;
+            border-radius: 18px;
+            padding: 22px;
+            text-align: left;
+            background: #f7fbf8;
+            border: 1px solid #dcebdd;
+        }
+
+        .ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-title {
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .status-badge {
+            background: #fff3cd;
+            color: #8a6500;
+            padding: 7px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-available {
+            background: #e5f7e9;
+            color: #176b31;
+        }
+
+        .assessment-box {
+            margin-top: 18px;
+            padding: 18px;
+            background: white;
+            border-radius: 14px;
+            border: 1px solid #e5ece6;
+        }
+
+        .assessment-label {
+            color: #6c776e;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .assessment-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #16833b;
+        }
+
+        .risk-level {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .risk-high {
+            background: #fde8e8;
+            color: #a61b1b;
+        }
+
+        .risk-medium {
+            background: #fff4d6;
+            color: #8a6500;
+        }
+
+        .risk-low {
+            background: #e5f7e9;
+            color: #176b31;
+        }
+
+        .details {
+            margin-top: 22px;
+            text-align: left;
+        }
+
+        .section-title {
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .detail-box {
+            background: #f7faf7;
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid #e5ece6;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #6d776f;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .vet-card {
+            margin-top: 22px;
+            padding: 20px;
+            border-radius: 16px;
+            background: #eef7ff;
+            border: 1px solid #d7e9f7;
+            text-align: left;
+        }
+
+        .vet-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #245b80;
+        }
+
+        .vet-text {
+            margin-top: 8px;
+            color: #4f6878;
+            line-height: 1.6;
+        }
+
+        .warning {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #fff8e8;
+            border: 1px solid #f1dfac;
+            color: #705a20;
+            text-align: left;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 180px;
+            padding: 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 800;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: #16833b;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e8f2ea;
+            color: #16833b;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 13px 15px;
+            }
+
+            .brand {
+                font-size: 19px;
+            }
+
+            .container {
+                padding: 18px 12px 30px;
+            }
+
+            .success-card {
+                padding: 22px 15px;
+                border-radius: 16px;
+            }
+
+            .success-title {
+                font-size: 23px;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="brand">
+        Livestock <span>360°</span>
+    </div>
+
+    <select id="languageSelector" class="language">
+
+        <option value="en">English</option>
+        <option value="te">తెలుగు</option>
+        <option value="hi">हिंदी</option>
+        <option value="ta">தமிழ்</option>
+        <option value="kn">ಕನ್ನಡ</option>
+
+    </select>
+
+</header>
+
+
+<main class="container">
+
+    <section class="success-card">
+
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+
+        <h1 class="success-title" id="successTitle">
+            Health Report Submitted
+        </h1>
+
+
+        <p class="success-message" id="successMessage">
+            Your animal health report has been successfully
+            submitted and recorded.
+        </p>
+
+
+        <div class="report-id">
+
+            <span id="reportIdLabel">
+                Report ID:
+            </span>
+
+            #{{ report.id }}
+
+        </div>
+
+
+        <!-- AI ASSESSMENT -->
+
+        <div class="ai-card">
+
+            <div class="ai-header">
+
+                <div class="ai-title" id="aiTitle">
+                    🧠 AI Health Assessment
+                </div>
+
+
+                {% if report.risk_score %}
+
+                <span
+                    class="status-badge status-available"
+                    id="statusBadge"
+                >
+                    Analysis Available
+                </span>
+
+                {% else %}
+
+                <span
+                    class="status-badge"
+                    id="statusBadge"
+                >
+                    Pending Analysis
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+            {% if report.risk_score %}
+
+
+            <!-- RISK SCORE -->
+
+            <div class="assessment-box">
+
+                <div
+                    class="assessment-label"
+                    id="riskLabel"
+                >
+                    Risk Score
+                </div>
+
+                <div class="assessment-value">
+                    {{ report.risk_score }}%
+                </div>
+
+            </div>
+
+
+            <!-- RISK LEVEL -->
+
+<div class="assessment-box">
+
+    <div
+        class="assessment-label"
+        id="riskLevelLabel"
+    >
+        Risk Level
+    </div>
+
+    <div class="assessment-value">
+
+        {% if report.risk_level == "High" %}
+
+        <span class="risk-level risk-high">
+            High
+        </span>
+
+        {% elif report.risk_level == "Medium" %}
+
+        <span class="risk-level risk-medium">
+            Medium
+        </span>
+
+        {% elif report.risk_level == "Low" %}
+
+        <span class="risk-level risk-low">
+            Low
+        </span>
+
+        {% else %}
+
+        <span class="risk-level">
+            Not available
+        </span>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+            <!-- PREDICTED DISEASE -->
+
+            <div class="assessment-box">
+
+                <div
+                    class="assessment-label"
+                    id="diseaseLabel"
+                >
+                    Possible Health Condition
+                </div>
+
+                <div class="assessment-value">
+                    {{ report.predicted_disease }}
+                </div>
+
+            </div>
+
+
+            <!-- DISEASE CONFIDENCE -->
+
+            <div class="assessment-box">
+
+                <div
+                    class="assessment-label"
+                    id="confidenceLabel"
+                >
+                    Disease Model Confidence
+                </div>
+
+                <div class="assessment-value">
+
+                    {% if report.disease_confidence %}
+                        {{ report.disease_confidence }}%
+                    {% else %}
+                        Not available
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="assessment-box">
+
+                <div
+                    class="assessment-label"
+                    id="analysisLabel"
+                >
+                    Current Status
+                </div>
+
+                <div
+                    class="assessment-value"
+                    id="analysisValue"
+                >
+                    AI model is not connected yet
+                </div>
+
+            </div>
+
+
+            <div class="assessment-box">
+
+                <div
+                    class="assessment-label"
+                    id="recommendationLabel"
+                >
+                    Recommended Action
+                </div>
+
+                <div
+                    class="detail-value"
+                    id="recommendationText"
+                >
+                    Your report has been received.
+                    A veterinarian should review the case.
+                </div>
+
+            </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- REPORT DETAILS -->
+
+        <div class="details">
+
+
+            <div
+                class="section-title"
+                id="detailsTitle"
+            >
+                🐄 Report Details
+            </div>
+
+
+            <div class="detail-grid">
+
+
+                <div class="detail-box">
+
+                    <div
+                        class="detail-label"
+                        id="animalLabel"
+                    >
+                        Animal
+                    </div>
+
+                    <div class="detail-value">
+                        {{ report.animal.animal_id }}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div
+                        class="detail-label"
+                        id="typeLabel"
+                    >
+                        Animal Type
+                    </div>
+
+                    <div class="detail-value">
+                        {{ report.animal.animal_type }}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div
+                        class="detail-label"
+                        id="temperatureLabel"
+                    >
+                        Temperature
+                    </div>
+
+                    <div class="detail-value">
+
+                        {% if report.temperature %}
+
+                            {{ report.temperature }} °C
+
+                        {% else %}
+
+                            Not provided
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div
+                        class="detail-label"
+                        id="statusLabel"
+                    >
+                        Report Status
+                    </div>
+
+                    <div class="detail-value">
+                        {{ report.status }}
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div
+                class="detail-box"
+                style="margin-top:12px;"
+            >
+
+                <div
+                    class="detail-label"
+                    id="symptomsLabel"
+                >
+                    Symptoms Reported
+                </div>
+
+                <div class="detail-value">
+                    {{ report.symptoms }}
+                </div>
+
+            </div>
+
+
+            {% if report.location_address %}
+
+            <div
+                class="detail-box"
+                style="margin-top:12px;"
+            >
+
+                <div
+                    class="detail-label"
+                    id="locationLabel"
+                >
+                    📍 Location
+                </div>
+
+                <div class="detail-value">
+                    {{ report.location_address }}
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- VETERINARY REVIEW -->
+
+        <div class="vet-card">
+
+            <div
+                class="vet-title"
+                id="vetTitle"
+            >
+                👨‍⚕️ Veterinary Review
+            </div>
+
+            <div
+                class="vet-text"
+                id="vetText"
+            >
+                This assessment is intended as an early warning
+                and decision-support tool. A qualified
+                veterinarian should review the animal before
+                treatment decisions are made.
+            </div>
+
+        </div>
+
+
+        <!-- WARNING -->
+
+        <div
+            class="warning"
+            id="warningText"
+        >
+            ⚠️ AI results are not a confirmed veterinary
+            diagnosis. If the animal appears seriously ill,
+            contact a veterinarian as soon as possible.
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+
+            <a
+                href="{% url 'farmer_dashboard' %}"
+                class="btn btn-primary"
+                id="dashboardButton"
+            >
+                🏠 Back to Dashboard
+            </a>
+
+
+            <a
+                href="{% url 'report_problem' %}"
+                class="btn btn-secondary"
+                id="reportAgainButton"
+            >
+                ➕ Report Another Animal
+            </a>
+
+
+        </div>
+
+
+    </section>
+
+</main>
+
+
+<script>
+
+const translations = {
+
+    en: {
+
+        successTitle: "Health Report Submitted",
+
+        successMessage:
+            "Your animal health report has been successfully submitted and recorded.",
+
+        reportIdLabel: "Report ID:",
+
+        aiTitle: "🧠 AI Health Assessment",
+
+        pending: "Pending Analysis",
+
+        available: "Analysis Available",
+
+        riskLabel: "Risk Score",
+
+        riskLevelLabel: "Risk Level",
+
+        diseaseLabel: "Possible Health Condition",
+
+        confidenceLabel: "Disease Model Confidence",
+
+        analysisLabel: "Current Status",
+
+        analysisValue: "AI model is not connected yet",
+
+        recommendationLabel: "Recommended Action",
+
+        recommendationText:
+            "Your report has been received. A veterinarian should review the case.",
+
+        detailsTitle: "🐄 Report Details",
+
+        animalLabel: "Animal",
+
+        typeLabel: "Animal Type",
+
+        temperatureLabel: "Temperature",
+
+        statusLabel: "Report Status",
+
+        symptomsLabel: "Symptoms Reported",
+
+        locationLabel: "📍 Location",
+
+        vetTitle: "👨‍⚕️ Veterinary Review",
+
+        vetText:
+            "This assessment is intended as an early warning and decision-support tool. A qualified veterinarian should review the animal before treatment decisions are made.",
+
+        warningText:
+            "⚠️ AI results are not a confirmed veterinary diagnosis. If the animal appears seriously ill, contact a veterinarian as soon as possible.",
+
+        dashboardButton: "🏠 Back to Dashboard",
+
+        reportAgainButton: "➕ Report Another Animal"
+
+    },
+
+
+    te: {
+
+        successTitle: "ఆరోగ్య నివేదిక సమర్పించబడింది",
+
+        successMessage:
+            "మీ జంతువు ఆరోగ్య నివేదిక విజయవంతంగా సమర్పించబడింది.",
+
+        reportIdLabel: "నివేదిక ID:",
+
+        aiTitle: "🧠 AI ఆరోగ్య అంచనా",
+
+        pending: "విశ్లేషణ పెండింగ్‌లో ఉంది",
+
+        available: "విశ్లేషణ అందుబాటులో ఉంది",
+
+        riskLabel: "ప్రమాద స్కోర్",
+
+        riskLevelLabel: "ప్రమాద స్థాయి",
+
+        diseaseLabel: "సంభావ్య ఆరోగ్య పరిస్థితి",
+
+        confidenceLabel: "వ్యాధి మోడల్ నమ్మక స్థాయి",
+
+        analysisLabel: "ప్రస్తుత స్థితి",
+
+        analysisValue: "AI మోడల్ ఇంకా కనెక్ట్ కాలేదు",
+
+        recommendationLabel: "సిఫార్సు",
+
+        recommendationText:
+            "మీ నివేదిక అందింది. పశువైద్యుడు దీనిని పరిశీలించాలి.",
+
+        detailsTitle: "🐄 నివేదిక వివరాలు",
+
+        animalLabel: "జంతువు",
+
+        typeLabel: "జంతువు రకం",
+
+        temperatureLabel: "ఉష్ణోగ్రత",
+
+        statusLabel: "నివేదిక స్థితి",
+
+        symptomsLabel: "నివేదించిన లక్షణాలు",
+
+        locationLabel: "📍 ప్రదేశం",
+
+        vetTitle: "👨‍⚕️ పశువైద్య పరిశీలన",
+
+        vetText:
+            "ఈ అంచనా ముందస్తు హెచ్చరిక మరియు నిర్ణయ సహాయక సాధనం మాత్రమే. చికిత్స నిర్ణయాలకు ముందు అర్హత కలిగిన పశువైద్యుడు జంతువును పరిశీలించాలి.",
+
+        warningText:
+            "⚠️ AI ఫలితం ఖచ్చితమైన పశువైద్య నిర్ధారణ కాదు. జంతువు తీవ్రంగా అనారోగ్యంగా కనిపిస్తే వెంటనే పశువైద్యుడిని సంప్రదించండి.",
+
+        dashboardButton:
+            "🏠 డ్యాష్‌బోర్డ్‌కు తిరిగి వెళ్లండి",
+
+        reportAgainButton:
+            "➕ మరో జంతువును నివేదించండి"
+
+    },
+
+
+    hi: {
+
+        successTitle: "स्वास्थ्य रिपोर्ट जमा हो गई",
+
+        successMessage:
+            "आपके पशु की स्वास्थ्य रिपोर्ट सफलतापूर्वक जमा हो गई है।",
+
+        reportIdLabel: "रिपोर्ट ID:",
+
+        aiTitle: "🧠 AI स्वास्थ्य आकलन",
+
+        pending: "विश्लेषण लंबित है",
+
+        available: "विश्लेषण उपलब्ध है",
+
+        riskLabel: "जोखिम स्कोर",
+
+        riskLevelLabel: "जोखिम स्तर",
+
+        diseaseLabel: "संभावित स्वास्थ्य स्थिति",
+
+        confidenceLabel: "रोग मॉडल का विश्वास स्तर",
+
+        analysisLabel: "वर्तमान स्थिति",
+
+        analysisValue: "AI मॉडल अभी कनेक्ट नहीं है",
+
+        recommendationLabel: "सुझाव",
+
+        recommendationText:
+            "आपकी रिपोर्ट मिल गई है। पशु चिकित्सक को मामले की समीक्षा करनी चाहिए।",
+
+        detailsTitle: "🐄 रिपोर्ट विवरण",
+
+        animalLabel: "पशु",
+
+        typeLabel: "पशु का प्रकार",
+
+        temperatureLabel: "तापमान",
+
+        statusLabel: "रिपोर्ट स्थिति",
+
+        symptomsLabel: "बताए गए लक्षण",
+
+        locationLabel: "📍 स्थान",
+
+        vetTitle: "👨‍⚕️ पशु चिकित्सक की समीक्षा",
+
+        vetText:
+            "यह आकलन केवल शुरुआती चेतावनी और निर्णय सहायता के लिए है। उपचार का निर्णय लेने से पहले योग्य पशु चिकित्सक को पशु की जांच करनी चाहिए।",
+
+        warningText:
+            "⚠️ AI परिणाम निश्चित पशु चिकित्सा निदान नहीं है। यदि पशु गंभीर रूप से बीमार दिखाई दे तो जल्द से जल्द पशु चिकित्सक से संपर्क करें।",
+
+        dashboardButton:
+            "🏠 डैशबोर्ड पर वापस जाएं",
+
+        reportAgainButton:
+            "➕ दूसरे पशु की रिपोर्ट करें"
+
+    },
+
+
+    ta: {
+
+        successTitle: "சுகாதார அறிக்கை சமர்ப்பிக்கப்பட்டது",
+
+        successMessage:
+            "உங்கள் விலங்கின் சுகாதார அறிக்கை வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது.",
+
+        reportIdLabel: "அறிக்கை ID:",
+
+        aiTitle: "🧠 AI சுகாதார மதிப்பீடு",
+
+        pending: "பகுப்பாய்வு நிலுவையில் உள்ளது",
+
+        available: "பகுப்பாய்வு கிடைக்கிறது",
+
+        riskLabel: "ஆபத்து மதிப்பெண்",
+
+        riskLevelLabel: "ஆபத்து நிலை",
+
+        diseaseLabel: "சாத்தியமான உடல்நிலை",
+
+        confidenceLabel: "நோய் மாதிரி நம்பிக்கை நிலை",
+
+        analysisLabel: "தற்போதைய நிலை",
+
+        analysisValue: "AI மாதிரி இன்னும் இணைக்கப்படவில்லை",
+
+        recommendationLabel: "பரிந்துரை",
+
+        recommendationText:
+            "உங்கள் அறிக்கை பெறப்பட்டது. கால்நடை மருத்துவர் இதை பரிசீலிக்க வேண்டும்.",
+
+        detailsTitle: "🐄 அறிக்கை விவரங்கள்",
+
+        animalLabel: "விலங்கு",
+
+        typeLabel: "விலங்கு வகை",
+
+        temperatureLabel: "வெப்பநிலை",
+
+        statusLabel: "அறிக்கை நிலை",
+
+        symptomsLabel: "தெரிவிக்கப்பட்ட அறிகுறிகள்",
+
+        locationLabel: "📍 இடம்",
+
+        vetTitle: "👨‍⚕️ கால்நடை மருத்துவர் பரிசீலனை",
+
+        vetText:
+            "இந்த மதிப்பீடு ஆரம்ப எச்சரிக்கை மற்றும் முடிவு ஆதரவு கருவியாகும். சிகிச்சை முடிவுகளுக்கு முன் தகுதியான கால்நடை மருத்துவர் விலங்கை பரிசோதிக்க வேண்டும்.",
+
+        warningText:
+            "⚠️ AI முடிவு உறுதியான கால்நடை மருத்துவ நோயறிதல் அல்ல. விலங்கு மிகவும் நோய்வாய்ப்பட்டதாகத் தெரிந்தால் உடனடியாக கால்நடை மருத்துவரை தொடர்பு கொள்ளுங்கள்.",
+
+        dashboardButton:
+            "🏠 டாஷ்போர்டுக்குத் திரும்பு",
+
+        reportAgainButton:
+            "➕ மற்றொரு விலங்கைப் புகாரளிக்கவும்"
+
+    },
+
+
+    kn: {
+
+        successTitle: "ಆರೋಗ್ಯ ವರದಿ ಸಲ್ಲಿಸಲಾಗಿದೆ",
+
+        successMessage:
+            "ನಿಮ್ಮ ಪ್ರಾಣಿಯ ಆರೋಗ್ಯ ವರದಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ.",
+
+        reportIdLabel: "ವರದಿ ID:",
+
+        aiTitle: "🧠 AI ಆರೋಗ್ಯ ಮೌಲ್ಯಮಾಪನ",
+
+        pending: "ವಿಶ್ಲೇಷಣೆ ಬಾಕಿಯಿದೆ",
+
+        available: "ವಿಶ್ಲೇಷಣೆ ಲಭ್ಯವಿದೆ",
+
+        riskLabel: "ಅಪಾಯದ ಅಂಕ",
+
+        riskLevelLabel: "ಅಪಾಯದ ಮಟ್ಟ",
+
+        diseaseLabel: "ಸಂಭಾವ್ಯ ಆರೋಗ್ಯ ಸ್ಥಿತಿ",
+
+        confidenceLabel: "ರೋಗ ಮಾದರಿ ವಿಶ್ವಾಸ ಮಟ್ಟ",
+
+        analysisLabel: "ಪ್ರಸ್ತುತ ಸ್ಥಿತಿ",
+
+        analysisValue: "AI ಮಾದರಿ ಇನ್ನೂ ಸಂಪರ್ಕಗೊಂಡಿಲ್ಲ",
+
+        recommendationLabel: "ಶಿಫಾರಸು",
+
+        recommendationText:
+            "ನಿಮ್ಮ ವರದಿ ಸ್ವೀಕರಿಸಲಾಗಿದೆ. ಪಶುವೈದ್ಯರು ಪ್ರಕರಣವನ್ನು ಪರಿಶೀಲಿಸಬೇಕು.",
+
+        detailsTitle: "🐄 ವರದಿ ವಿವರಗಳು",
+
+        animalLabel: "ಪ್ರಾಣಿ",
+
+        typeLabel: "ಪ್ರಾಣಿಯ ಪ್ರಕಾರ",
+
+        temperatureLabel: "ತಾಪಮಾನ",
+
+        statusLabel: "ವರದಿ ಸ್ಥಿತಿ",
+
+        symptomsLabel: "ವರದಿ ಮಾಡಿದ ಲಕ್ಷಣಗಳು",
+
+        locationLabel: "📍 ಸ್ಥಳ",
+
+        vetTitle: "👨‍⚕️ ಪಶುವೈದ್ಯರ ಪರಿಶೀಲನೆ",
+
+        vetText:
+            "ಈ ಮೌಲ್ಯಮಾಪನವು ಆರಂಭಿಕ ಎಚ್ಚರಿಕೆ ಮತ್ತು ನಿರ್ಧಾರ ಸಹಾಯಕ್ಕಾಗಿ ಮಾತ್ರ. ಚಿಕಿತ್ಸೆಯ ನಿರ್ಧಾರಕ್ಕೆ ಮೊದಲು ಅರ್ಹ ಪಶುವೈದ್ಯರು ಪ್ರಾಣಿಯನ್ನು ಪರಿಶೀಲಿಸಬೇಕು.",
+
+        warningText:
+            "⚠️ AI ಫಲಿತಾಂಶವು ಖಚಿತವಾದ ಪಶುವೈದ್ಯಕೀಯ ರೋಗನಿರ್ಣಯವಲ್ಲ. ಪ್ರಾಣಿ ಗಂಭೀರವಾಗಿ ಅನಾರೋಗ್ಯದಲ್ಲಿರುವಂತೆ ಕಂಡರೆ ತಕ್ಷಣ ಪಶುವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+
+        dashboardButton:
+            "🏠 ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಹಿಂತಿರುಗಿ",
+
+        reportAgainButton:
+            "➕ ಮತ್ತೊಂದು ಪ್ರಾಣಿಯನ್ನು ವರದಿ ಮಾಡಿ"
+
+    }
+
+};
+
+
+function changeLanguage(language) {
+
+    const t = translations[language];
+
+    if (!t) {
+        return;
+    }
+
+
+    document.getElementById("successTitle").textContent =
+        t.successTitle;
+
+
+    document.getElementById("successMessage").textContent =
+        t.successMessage;
+
+
+    document.getElementById("reportIdLabel").textContent =
+        t.reportIdLabel;
+
+
+    document.getElementById("aiTitle").textContent =
+        t.aiTitle;
+
+
+    document.getElementById("detailsTitle").textContent =
+        t.detailsTitle;
+
+
+    document.getElementById("animalLabel").textContent =
+        t.animalLabel;
+
+
+    document.getElementById("typeLabel").textContent =
+        t.typeLabel;
+
+
+    document.getElementById("temperatureLabel").textContent =
+        t.temperatureLabel;
+
+
+    document.getElementById("statusLabel").textContent =
+        t.statusLabel;
+
+
+    document.getElementById("symptomsLabel").textContent =
+        t.symptomsLabel;
+
+
+    const locationLabel =
+        document.getElementById("locationLabel");
+
+    if (locationLabel) {
+
+        locationLabel.textContent =
+            t.locationLabel;
+
+    }
+
+
+    document.getElementById("vetTitle").textContent =
+        t.vetTitle;
+
+
+    document.getElementById("vetText").textContent =
+        t.vetText;
+
+
+    document.getElementById("warningText").textContent =
+        t.warningText;
+
+
+    document.getElementById("dashboardButton").textContent =
+        t.dashboardButton;
+
+
+    document.getElementById("reportAgainButton").textContent =
+        t.reportAgainButton;
+
+
+    const riskLabel =
+        document.getElementById("riskLabel");
+
+    if (riskLabel) {
+
+        riskLabel.textContent =
+            t.riskLabel;
+
+    }
+
+
+    const riskLevelLabel =
+        document.getElementById("riskLevelLabel");
+
+    if (riskLevelLabel) {
+
+        riskLevelLabel.textContent =
+            t.riskLevelLabel;
+
+    }
+
+
+    const diseaseLabel =
+        document.getElementById("diseaseLabel");
+
+    if (diseaseLabel) {
+
+        diseaseLabel.textContent =
+            t.diseaseLabel;
+
+    }
+
+
+    const confidenceLabel =
+        document.getElementById("confidenceLabel");
+
+    if (confidenceLabel) {
+
+        confidenceLabel.textContent =
+            t.confidenceLabel;
+
+    }
+
+
+    const analysisLabel =
+        document.getElementById("analysisLabel");
+
+    if (analysisLabel) {
+
+        analysisLabel.textContent =
+            t.analysisLabel;
+
+    }
+
+
+    const analysisValue =
+        document.getElementById("analysisValue");
+
+    if (analysisValue) {
+
+        analysisValue.textContent =
+            t.analysisValue;
+
+    }
+
+
+    const recommendationLabel =
+        document.getElementById("recommendationLabel");
+
+    if (recommendationLabel) {
+
+        recommendationLabel.textContent =
+            t.recommendationLabel;
+
+    }
+
+
+    const recommendationText =
+        document.getElementById("recommendationText");
+
+    if (recommendationText) {
+
+        recommendationText.textContent =
+            t.recommendationText;
+
+    }
+
+
+    const statusBadge =
+        document.getElementById("statusBadge");
+
+    if (statusBadge) {
+
+        if (
+            statusBadge.classList.contains(
+                "status-available"
+            )
+        ) {
+
+            statusBadge.textContent =
+                t.available;
+
+        } else {
+
+            statusBadge.textContent =
+                t.pending;
+
+        }
+
+    }
+
+
+    localStorage.setItem(
+        "livestock_language",
+        language
+    );
+
+}
+
+
+document
+    .getElementById("languageSelector")
+    .addEventListener(
+        "change",
+        function () {
+
+            changeLanguage(
+                this.value
+            );
+
+        }
+    );
+
+
+const savedLanguage =
+    localStorage.getItem(
+        "livestock_language"
+    );
+
+
+if (savedLanguage) {
+
+    document.getElementById(
+        "languageSelector"
+    ).value = savedLanguage;
+
+    changeLanguage(
+        savedLanguage
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>

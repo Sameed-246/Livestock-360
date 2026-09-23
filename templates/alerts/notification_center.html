@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Notifications | Livestock 360°</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f4;
+            color: #17351f;
+        }
+
+        header {
+            background: #166534;
+            color: white;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .heading {
+            margin-bottom: 22px;
+        }
+
+        .heading h1 {
+            margin-bottom: 6px;
+        }
+
+        .heading p {
+            color: #64746a;
+        }
+
+        .notification {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 6px solid #9ca3af;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+        }
+
+        .notification.high {
+            border-left-color: #dc2626;
+        }
+
+        .notification.unread {
+            background: #fffdf5;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .title {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .date {
+            color: #78847c;
+            font-size: 12px;
+        }
+
+        .message {
+            line-height: 1.6;
+            color: #405047;
+            margin: 12px 0;
+        }
+
+        .case-link {
+            display: inline-block;
+            background: #166534;
+            color: white;
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .empty {
+            background: white;
+            padding: 45px 20px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #dc2626;
+            color: white;
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                padding: 15px;
+            }
+
+            .container {
+                margin-top: 20px;
+            }
+
+            .top-row {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="brand">
+        🐄 Livestock 360°
+    </div>
+
+    <a
+        href="{% url 'farmer_dashboard' %}"
+        class="back"
+    >
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <div class="heading">
+
+        <h1>🔔 Notifications</h1>
+
+        {% if unread_count %}
+            <span class="badge">
+                {{ unread_count }} unread
+            </span>
+        {% else %}
+            <p>You're all caught up.</p>
+        {% endif %}
+
+    </div>
+
+
+    {% if alerts %}
+
+        {% for alert in alerts %}
+
+            <div
+                class="notification
+                {% if alert.alert_type == 'High Risk' %}
+                    high
+                {% endif %}
+                {% if not alert.is_read %}
+                    unread
+                {% endif %}"
+            >
+
+                <div class="top-row">
+
+                    <div class="title">
+                        {{ alert.title }}
+                    </div>
+
+                    <div class="date">
+                        {{ alert.created_at|date:"d M Y, h:i A" }}
+                    </div>
+
+                </div>
+
+
+                <div class="message">
+                    {{ alert.message }}
+                </div>
+
+
+                <a
+                    href="{% url 'mark_alert_read' alert.id %}"
+                    class="case-link"
+                >
+                    View Case
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                🔔
+            </div>
+
+            <h2>No notifications</h2>
+
+            <p>
+                You don't have any health alerts right now.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>

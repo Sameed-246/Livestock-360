@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Delete Animal | Livestock 360°</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8f3;
+            color: #1f2d24;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #176b3a;
+            color: white;
+            padding: 18px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 25px;
+        }
+
+        .container {
+            max-width: 550px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 22px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            margin-bottom: 12px;
+            color: #b42318;
+        }
+
+        .animal-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #fff4e5;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            line-height: 1.5;
+            color: #7a4b00;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button,
+        .cancel {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .delete-btn {
+            border: none;
+            background: #c62828;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #a61b1b;
+        }
+
+        .cancel {
+            background: #e8f1eb;
+            color: #176b3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                margin: 30px auto;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🐄 Livestock 360°</h1>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="icon">⚠️</div>
+
+        <h2>Delete Animal?</h2>
+
+        <div class="animal-name">
+            {{ animal.animal_id }}
+        </div>
+
+        <p>
+            Animal Type:
+            <strong>{{ animal.animal_type }}</strong>
+        </p>
+
+        <div class="warning">
+            Are you sure you want to remove this animal?
+
+            <br><br>
+
+            This action cannot be undone.
+            The animal's health reports will also be removed.
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="buttons">
+
+                <a
+                    href="{% url 'animal_list' %}"
+                    class="cancel"
+                >
+                    ← Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="delete-btn"
+                >
+                    🗑 Delete Animal
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

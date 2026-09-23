@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Farmer Login | Livestock 360°</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f8f4;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            width: 420px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 42px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #087f3f;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #667;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #173b2b;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cdded4;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #168a4d;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #087f3f;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #056b35;
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register a {
+            color: #087f3f;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .vet-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid #ddd;
+        }
+
+        .vet-link a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        .error {
+            background: #ffecec;
+            color: #b00020;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="logo">👨‍🌾</div>
+
+    <h1>Farmer Login</h1>
+
+    <p class="subtitle">
+        Livestock 360° — Animal Health Monitoring
+    </p>
+
+    {% if form.errors %}
+        <div class="error">
+            Invalid Farmer ID or Password.
+        </div>
+    {% endif %}
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <label>Farmer ID</label>
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Enter Farmer ID"
+            required
+        >
+
+        <label>Password</label>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+            required
+        >
+
+        <button type="submit">
+            Login as Farmer
+        </button>
+
+    </form>
+
+    <div class="register">
+        New farmer?
+        <a href="{% url 'register' %}">
+            Create Account
+        </a>
+    </div>
+
+    <div class="vet-link">
+        🩺
+        <a href="{% url 'vet_login' %}">
+            Veterinarian Login
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>
