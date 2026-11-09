@@ -448,7 +448,7 @@
                     <div class="value">
 
                         {% if report.temperature %}
-                            {{ report.temperature }} °F
+                            {{ report.temperature }} °C
                         {% else %}
                             Not provided
                         {% endif %}
@@ -517,8 +517,8 @@
 
                 {% else %}
 
-                <div>
-                    AI assessment is currently pending.
+                <div style="color: #23527c; font-weight: bold;">
+                    ⚕️ AI assessment unavailable — veterinarian review required.
                 </div>
 
                 {% endif %}

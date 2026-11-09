@@ -13,7 +13,11 @@ def load_model(path):
     if not path.exists():
         return None
 
-    return joblib.load(path)
+    try:
+        return joblib.load(path)
+    except Exception as e:
+        print(f"Warning: Failed to load model from {path}: {e}")
+        return None
 
 
 def prepare_input(data):
@@ -22,14 +26,24 @@ def prepare_input(data):
         data.get("symptoms", "")
     ).replace(",", " ").strip()
 
+    age_val = data.get("age")
+    try:
+        age = float(age_val) if age_val not in (None, "") else 0.0
+    except (ValueError, TypeError):
+        age = 0.0
+
+    temp_val = data.get("temperature")
+    try:
+        temp = float(temp_val) if temp_val not in (None, "") else 0.0
+    except (ValueError, TypeError):
+        temp = 0.0
+
     return pd.DataFrame([{
         "animal_type": data.get(
             "animal_type",
             "Cattle"
         ),
-        "age": float(
-            data.get("age", 0)
-        ),
+        "age": age,
         "gender": data.get(
             "gender",
             "Female"
@@ -45,9 +59,7 @@ def prepare_input(data):
             )
         ),
         "symptoms": symptoms,
-        "temperature": float(
-            data.get("temperature", 0)
-        ),
+        "temperature": temp,
     }])
 
 
@@ -151,125 +163,141 @@ def get_recommendation(
 
 
 def predict_health_risk(data):
-
-    risk_model = load_model(
-        RISK_MODEL_PATH
-    )
-
-    disease_model = load_model(
-        DISEASE_MODEL_PATH
-    )
-
-    if risk_model is None:
-
-        return {
-            "risk_score": None,
-            "risk_level": "Unknown",
-            "predicted_disease": (
-                "AI model not available"
-            ),
-            "disease_confidence": None,
-            "recommendation": (
-                "Your report has been received. "
-                "A veterinarian should review "
-                "the case."
-            ),
-        }
-
-    input_data = prepare_input(
-        data
-    )
-
-    # Predict risk level
-    predicted_risk = risk_model.predict(
-        input_data
-    )[0]
-
-    # Get risk probabilities
-    probability_map = {}
-
-    if hasattr(
-        risk_model,
-        "predict_proba"
-    ):
-
-        probabilities = (
-            risk_model.predict_proba(
-                input_data
-            )[0]
+    try:
+        risk_model = load_model(
+            RISK_MODEL_PATH
         )
 
-        classes = risk_model.classes_
-
-        probability_map = dict(
-            zip(
-                classes,
-                probabilities
-            )
+        disease_model = load_model(
+            DISEASE_MODEL_PATH
         )
 
-    # Calculate consistent numeric score
-    risk_score = calculate_risk_score(
-        probability_map,
-        predicted_risk
-    )
+        if risk_model is None:
+            return {
+                "risk_score": None,
+                "risk_level": "Unknown",
+                "predicted_disease": (
+                    "AI assessment unavailable — veterinarian review required"
+                ),
+                "disease_confidence": None,
+                "recommendation": (
+                    "AI assessment unavailable — veterinarian review required. "
+                    "Case has been queued for priority clinical review."
+                ),
+            }
 
-    # Default disease result
-    predicted_disease = (
-        "No specific condition detected"
-    )
-
-    disease_confidence = None
-
-    # Predict disease
-    if disease_model is not None:
-
-        predicted_disease = (
-            disease_model.predict(
-                input_data
-            )[0]
+        input_data = prepare_input(
+            data
         )
+
+        # Predict risk level
+        predicted_risk = risk_model.predict(
+            input_data
+        )[0]
+
+        # Get risk probabilities
+        probability_map = {}
 
         if hasattr(
-            disease_model,
+            risk_model,
             "predict_proba"
         ):
 
-            disease_probabilities = (
-                disease_model.predict_proba(
+            probabilities = (
+                risk_model.predict_proba(
                     input_data
                 )[0]
             )
 
-            disease_classes = (
-                disease_model.classes_
-            )
+            classes = risk_model.classes_
 
-            disease_probability_map = dict(
+            probability_map = dict(
                 zip(
-                    disease_classes,
-                    disease_probabilities
+                    classes,
+                    probabilities
                 )
             )
 
-            disease_confidence = round(
-                float(
-                    disease_probability_map.get(
-                        predicted_disease,
-                        0
-                    ) * 100
-                ),
-                2
-            )
+        # Calculate consistent numeric score
+        risk_score = calculate_risk_score(
+            probability_map,
+            predicted_risk
+        )
 
-    recommendation = get_recommendation(
-        predicted_risk
-    )
+        # Default disease result
+        predicted_disease = (
+            "No specific condition detected"
+        )
 
-    return {
-        "risk_score": risk_score,
-        "risk_level": predicted_risk,
-        "predicted_disease": predicted_disease,
-        "disease_confidence": disease_confidence,
-        "recommendation": recommendation,
-    }
+        disease_confidence = None
+
+        # Predict disease
+        if disease_model is not None:
+
+            try:
+                predicted_disease = (
+                    disease_model.predict(
+                        input_data
+                    )[0]
+                )
+
+                if hasattr(
+                    disease_model,
+                    "predict_proba"
+                ):
+
+                    disease_probabilities = (
+                        disease_model.predict_proba(
+                            input_data
+                        )[0]
+                    )
+
+                    disease_classes = (
+                        disease_model.classes_
+                    )
+
+                    disease_probability_map = dict(
+                        zip(
+                            disease_classes,
+                            disease_probabilities
+                        )
+                    )
+
+                    disease_confidence = round(
+                        float(
+                            disease_probability_map.get(
+                                predicted_disease,
+                                0
+                            ) * 100
+                        ),
+                        2
+                    )
+            except Exception as e:
+                print(f"Warning: Disease sub-model prediction failed: {e}")
+
+        recommendation = get_recommendation(
+            predicted_risk
+        )
+
+        return {
+            "risk_score": risk_score,
+            "risk_level": predicted_risk,
+            "predicted_disease": predicted_disease,
+            "disease_confidence": disease_confidence,
+            "recommendation": recommendation,
+        }
+
+    except Exception as exc:
+        print(f"Warning: Health risk prediction encountered error: {exc}")
+        return {
+            "risk_score": None,
+            "risk_level": "Unknown",
+            "predicted_disease": (
+                "AI assessment unavailable — veterinarian review required"
+            ),
+            "disease_confidence": None,
+            "recommendation": (
+                "AI assessment unavailable — veterinarian review required. "
+                "Case has been queued for priority clinical review."
+            ),
+        }

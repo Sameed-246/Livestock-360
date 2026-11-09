@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from animals.models import Animal
@@ -11,6 +11,9 @@ def home(request):
 
 @login_required
 def farmer_dashboard(request):
+
+    if request.user.groups.filter(name='Veterinarian').exists():
+        return redirect('vet_dashboard')
 
     # Get only animals belonging to the logged-in farmer
     animals = Animal.objects.filter(

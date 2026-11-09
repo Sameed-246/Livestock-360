@@ -127,3 +127,27 @@ class DiseaseReportForm(forms.ModelForm):
         except (InvalidOperation, ValueError):
 
             return None
+
+    def clean_temperature(self):
+        temp = self.cleaned_data.get('temperature')
+        if temp is not None:
+            if temp < Decimal('30.0') or temp > Decimal('45.0'):
+                raise forms.ValidationError(
+                    "Please enter a realistic body temperature between 30.0°C and 45.0°C."
+                )
+        return temp
+
+    def clean_symptoms(self):
+        symptoms = self.cleaned_data.get('symptoms', '')
+        if not symptoms or not symptoms.strip():
+            raise forms.ValidationError(
+                "Please describe or select the symptoms observed."
+            )
+        return symptoms.strip()
+
+    def clean_location_address(self):
+        address = self.cleaned_data.get('location_address')
+        if not address or not address.strip():
+            # If coordinates are not provided either, provide the professional fallback
+            return "Location unavailable — veterinarian can review manually."
+        return address.strip()

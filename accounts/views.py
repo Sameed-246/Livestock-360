@@ -73,6 +73,16 @@ def vet_login(request):
 
 def logout_view(request):
 
+    is_veterinarian = (
+        request.user.is_authenticated
+        and request.user.groups.filter(
+            name='Veterinarian'
+        ).exists()
+    )
+
     logout(request)
 
-    return redirect('vet_login')
+    if is_veterinarian:
+        return redirect('vet_login')
+
+    return redirect('farmer_login')

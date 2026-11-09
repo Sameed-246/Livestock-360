@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 
@@ -21,14 +22,58 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # ============================================================
+# ENVIRONMENT LOADER
+# ============================================================
+
+def _load_env_file(filepath):
+    """
+    Lightweight .env file loader using only Python standard library.
+    Loads key=value pairs into os.environ without overwriting existing vars.
+    """
+    if filepath.exists():
+        with open(filepath, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, val = line.split('=', 1)
+                    os.environ.setdefault(
+                        key.strip(),
+                        val.strip().strip("'\"")
+                    )
+
+
+_load_env_file(BASE_DIR / '.env')
+
+
+# ============================================================
 # SECURITY
 # ============================================================
 
-SECRET_KEY = 'django-insecure-=b1rv80)msvewcwy(+p)=*qk*$mgmc&_-6q)$4v$w8*i9%y+5c'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-=b1rv80)msvewcwy(+p)=*qk*$mgmc&_-6q)$4v$w8*i9%y+5c'
+)
 
-DEBUG = True
+DEBUG = os.environ.get(
+    'DEBUG',
+    'True'
+).lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = []
+
+_allowed_hosts_str = os.environ.get(
+    'ALLOWED_HOSTS',
+    'localhost,127.0.0.1,[::1]'
+)
+
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in _allowed_hosts_str.split(',')
+    if h.strip()
+]
+
+# Allow access from this PC's local network address.
+if '192.168.1.8' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('192.168.1.8')
 
 
 # ============================================================
@@ -129,20 +174,13 @@ WSGI_APPLICATION = 'livestock360.wsgi.application'
 # ============================================================
 
 DATABASES = {
-
     'default': {
-
         'ENGINE': 'django.db.backends.mysql',
-
-        'NAME': 'livestock360',
-
-        'USER': 'root',
-
-        'PASSWORD': 'Sameed@2468',
-
-        'HOST': 'localhost',
-
-        'PORT': '3306',
+        'NAME': os.environ.get('DB_NAME', 'livestock360'),
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'Sameed@2468'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
     }
 }
 
@@ -151,7 +189,24 @@ DATABASES = {
 # PASSWORD VALIDATION
 # ============================================================
 
-AUTH_PASSWORD_VALIDATORS = []
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME':
+            'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME':
+            'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME':
+            'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME':
+            'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 
 # ============================================================
@@ -173,29 +228,16 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-
-# This tells Django where your project-level
-# static folder is located.
-#
-# Example:
-#
-# Livestock360/
-#     static/
-#         images/
-#             livestock-bg.jpg
-
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # ============================================================
 # MEDIA FILES
 # ============================================================
-
-# If later you allow farmers to upload
-# animal photos, reports, etc., these settings
-# will be useful.
 
 MEDIA_URL = '/media/'
 
@@ -205,6 +247,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # ============================================================
 # LOGIN / LOGOUT
 # ============================================================
+
+LOGIN_URL = 'farmer_login'
 
 LOGIN_REDIRECT_URL = '/dashboard/'
 

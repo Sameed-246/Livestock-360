@@ -8,6 +8,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 
 from reports.models import DiseaseReport
+from ai_engine.v2.service import run_mastitis_assessment
 
 
 def veterinarian_required(request):
@@ -87,7 +88,138 @@ def vet_case_detail(request, report_id):
     return render(
         request,
         'veterinarian/vet_case_detail.html',
-        {'report': report}
+        {
+            'report': report
+        }
+    )
+
+
+@login_required
+def run_mastitis_assessment_view(request, report_id):
+
+    veterinarian_required(request)
+
+    report = get_object_or_404(
+        DiseaseReport.objects.select_related(
+            'animal',
+            'animal__owner'
+        ),
+        id=report_id
+    )
+
+    mastitis_result = None
+    mastitis_data = {}
+
+    if request.method == 'POST':
+
+        # Simple keys used by the Django template.
+        mastitis_data = {
+            'breed': request.POST.get(
+                'Breed',
+                ''
+            ),
+            'months_after_birth': request.POST.get(
+                'Months after giving birth',
+                ''
+            ),
+            'previous_mastitis': request.POST.get(
+                'Previous_Mastits_status',
+                '0'
+            ),
+            'iufl': request.POST.get(
+                'IUFL',
+                ''
+            ),
+            'eufl': request.POST.get(
+                'EUFL',
+                ''
+            ),
+            'iufr': request.POST.get(
+                'IUFR',
+                ''
+            ),
+            'eufr': request.POST.get(
+                'EUFR',
+                ''
+            ),
+            'iurl': request.POST.get(
+                'IURL',
+                ''
+            ),
+            'eurl': request.POST.get(
+                'EURL',
+                ''
+            ),
+            'iurr': request.POST.get(
+                'IURR',
+                ''
+            ),
+            'eurr': request.POST.get(
+                'EURR',
+                ''
+            ),
+            'temperature': request.POST.get(
+                'Temperature',
+                ''
+            ),
+            'hardness': request.POST.get(
+                'Hardness',
+                '0'
+            ),
+            'pain': request.POST.get(
+                'Pain',
+                '0'
+            ),
+            'milk_visibility': request.POST.get(
+                'Milk_visibility',
+                '0'
+            ),
+        }
+
+        # Convert template-friendly keys to the exact
+        # feature names expected by the V2 model.
+        mastitis_model_data = {
+            'Breed': mastitis_data['breed'],
+            'Months after giving birth': mastitis_data[
+                'months_after_birth'
+            ],
+            'Previous_Mastits_status': mastitis_data[
+                'previous_mastitis'
+            ],
+            'IUFL': mastitis_data['iufl'],
+            'EUFL': mastitis_data['eufl'],
+            'IUFR': mastitis_data['iufr'],
+            'EUFR': mastitis_data['eufr'],
+            'IURL': mastitis_data['iurl'],
+            'EURL': mastitis_data['eurl'],
+            'IURR': mastitis_data['iurr'],
+            'EURR': mastitis_data['eurr'],
+            'Temperature': mastitis_data[
+                'temperature'
+            ],
+            'Hardness': mastitis_data[
+                'hardness'
+            ],
+            'Pain': mastitis_data[
+                'pain'
+            ],
+            'Milk_visibility': mastitis_data[
+                'milk_visibility'
+            ],
+        }
+
+        mastitis_result = run_mastitis_assessment(
+            mastitis_model_data
+        )
+
+    return render(
+        request,
+        'veterinarian/vet_case_detail.html',
+        {
+            'report': report,
+            'mastitis_result': mastitis_result,
+            'mastitis_data': mastitis_data,
+        }
     )
 
 
@@ -145,5 +277,7 @@ def vet_surveillance_map(request):
     return render(
         request,
         'veterinarian/vet_map.html',
-        {'reports': reports}
+        {
+            'reports': reports
+        }
     )

@@ -592,6 +592,16 @@
             ← Back to Main Dashboard
         </a>
 
+        {% if messages %}
+            <div style="margin-top: 15px; margin-bottom: 10px;">
+                {% for message in messages %}
+                    <div style="padding: 14px 18px; border-radius: 12px; font-weight: bold; background: #e1f5e9; color: #176d40; border: 1px solid #bfe3cc;">
+                        ✅ {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
 
         <h1 class="page-title">
             🩺 Veterinarian Command Center
@@ -937,8 +947,7 @@
                                             <span
                                                 class="risk-badge risk-high"
                                             >
-                                                🔴 High
-                                                {{ report.risk_score }}
+                                                🔴 High{% if report.risk_score %} ({{ report.risk_score }}%){% endif %}
                                             </span>
 
                                         {% elif report.risk_level == 'Medium' %}
@@ -946,8 +955,7 @@
                                             <span
                                                 class="risk-badge risk-medium"
                                             >
-                                                🟠 Medium
-                                                {{ report.risk_score }}
+                                                🟠 Medium{% if report.risk_score %} ({{ report.risk_score }}%){% endif %}
                                             </span>
 
                                         {% elif report.risk_level == 'Low' %}
@@ -955,8 +963,7 @@
                                             <span
                                                 class="risk-badge risk-low"
                                             >
-                                                🟢 Low
-                                                {{ report.risk_score }}
+                                                🟢 Low{% if report.risk_score %} ({{ report.risk_score }}%){% endif %}
                                             </span>
 
                                         {% else %}
@@ -964,7 +971,7 @@
                                             <span
                                                 class="risk-badge risk-pending"
                                             >
-                                                ⚪ AI Pending
+                                                ⚪ Review Required
                                             </span>
 
                                         {% endif %}

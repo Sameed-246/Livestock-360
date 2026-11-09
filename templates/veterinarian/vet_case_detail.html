@@ -252,6 +252,16 @@
         ← Back to Dashboard
     </a>
 
+    {% if messages %}
+        <div style="margin-top: 15px; margin-bottom: 10px;">
+            {% for message in messages %}
+                <div style="padding: 14px 18px; border-radius: 12px; font-weight: bold; background: #e1f5e9; color: #176d40; border: 1px solid #bfe3cc;">
+                    ✅ {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
 
     <div class="title">
 
@@ -478,7 +488,7 @@
                 </div>
 
                 <strong>
-                    AI assessment pending
+                    AI assessment unavailable — veterinarian review required
                 </strong>
 
             {% endif %}
@@ -500,7 +510,7 @@
             {% if report.predicted_disease %}
                 {{ report.predicted_disease }}
             {% else %}
-                Not available
+                Clinical evaluation required
             {% endif %}
 
         </div>
@@ -517,7 +527,7 @@
     </section>
 
 
-    <!-- SYMPTOMS -->
+    <!-- SYMPTOMS & LOCATION -->
 
     <section class="card">
 
@@ -529,8 +539,6 @@
             {{ report.symptoms }}
         </div>
 
-        {% if report.location_address %}
-
         <br>
 
         <strong>
@@ -538,10 +546,12 @@
         </strong>
 
         <p>
-            {{ report.location_address }}
+            {% if report.location_address %}
+                {{ report.location_address }}
+            {% else %}
+                Location unavailable — veterinarian can review manually.
+            {% endif %}
         </p>
-
-        {% endif %}
 
     </section>
 
@@ -638,7 +648,240 @@
 
     </section>
 
+        <!-- ADVANCED CLINICAL AI -->
 
+    {% if report.animal.animal_type|lower == "cattle" %}
+
+    <section class="card">
+
+        <h2>
+            🧪 Advanced Clinical AI — Mastitis Screening
+        </h2>
+
+        <p class="disclaimer">
+            This optional V2 screening tool uses
+            cow-specific clinical measurements.
+            It provides decision support and does not
+            replace veterinary diagnosis.
+        </p>
+
+        <form
+            method="post"
+            action="{% url 'run_mastitis_assessment' report.id %}"
+        >
+
+            {% csrf_token %}
+
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;">
+
+                <div>
+                    <label>Breed</label>
+                    <input
+                        type="text"
+                        name="Breed"
+                        value="{{ mastitis_data.Breed|default:report.animal.breed }}"
+                        required
+                    >
+                </div>
+                
+
+                <div>
+                    <label>Months after giving birth</label>
+                    <input
+                        type="number"
+                        name="Months after giving birth"
+                        min="0"
+                        step="1"
+                        value="{{ mastitis_data.months_after_birth|default:'' }}"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label>Previous Mastitis Status</label>
+                    <select name="Previous_Mastits_status">
+                        <option value="0"
+                            {% if mastitis_data.Previous_Mastits_status == "0" %}selected{% endif %}>
+                            No
+                        </option>
+                        <option value="1"
+                            {% if mastitis_data.Previous_Mastits_status == "1" %}selected{% endif %}>
+                            Yes
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Temperature °C</label>
+                    <input
+                        type="number"
+                        name="Temperature"
+                        step="0.1"
+                        value="{{ mastitis_data.Temperature|default:report.temperature }}"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label>Hardness</label>
+                    <select name="Hardness">
+                        <option value="0">Normal</option>
+                        <option value="1">Abnormal</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Pain</label>
+                    <select name="Pain">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Milk Visibility</label>
+                    <select name="Milk_visibility">
+                        <option value="0">Normal</option>
+                        <option value="1">Abnormal</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <h3 style="margin-top:24px;">
+                Udder Measurements
+            </h3>
+
+            <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;">
+
+                <input
+                    type="number"
+                    name="IUFL"
+                    placeholder="IUFL"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="EUFL"
+                    placeholder="EUFL"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="IUFR"
+                    placeholder="IUFR"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="EUFR"
+                    placeholder="EUFR"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="IURL"
+                    placeholder="IURL"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="EURL"
+                    placeholder="EURL"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="IURR"
+                    placeholder="IURR"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="EURR"
+                    placeholder="EURR"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                style="margin-top:20px;"
+            >
+                Run Mastitis V2 Screening
+            </button>
+
+        </form>
+
+        {% if mastitis_result %}
+
+            <div
+                style="
+                    margin-top:24px;
+                    padding:20px;
+                    border-radius:12px;
+                "
+            >
+
+                <h3>
+                    V2 Mastitis Result
+                </h3>
+
+                {% if mastitis_result.assessment == "Positive" %}
+
+                    <strong>
+                        ⚠️ Possible Mastitis Pattern Detected
+                    </strong>
+
+                {% elif mastitis_result.assessment == "Negative" %}
+
+                    <strong>
+                        ✅ No Positive Mastitis Pattern Detected
+                    </strong>
+
+                {% else %}
+
+                    <strong>
+                        V2 Assessment Unavailable
+                    </strong>
+
+                {% endif %}
+
+                {% if mastitis_result.probability is not None %}
+
+                    <p>
+                        Model probability:
+                        <strong>
+                            {{ mastitis_result.probability }}%
+                        </strong>
+                    </p>
+
+                {% endif %}
+
+                <p>
+                    {{ mastitis_result.recommendation }}
+                </p>
+
+                <small>
+                    Model version:
+                    {{ mastitis_result.model_version }}
+                </small>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+    {% endif %}
 </main>
 
 </body>

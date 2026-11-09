@@ -896,7 +896,7 @@
                 {{ form.temperature }}
 
                 <span class="temperature-unit">
-                    °F
+                    °C
                 </span>
 
             </div>
@@ -1050,9 +1050,8 @@
                 type="submit"
                 class="submit-button"
                 id="submitButton"
-                disabled
             >
-                📍 Getting Location...
+                🚨 Submit Health Report
             </button>
 
 
@@ -1136,24 +1135,9 @@ function updateSubmitButton() {
         return;
     }
 
-
-    if (locationCaptured) {
-
-        submitButton.disabled = false;
-
-        submitButton.textContent =
-            "🚨 Submit Health Report";
-
-    }
-
-    else {
-
-        submitButton.disabled = true;
-
-        submitButton.textContent =
-            "📍 Getting Location...";
-
-    }
+    submitButton.disabled = false;
+    submitButton.textContent =
+        "🚨 Submit Health Report";
 
 }
 
@@ -1249,7 +1233,7 @@ function initializeMap() {
 
 
     L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png",
         {
             maxZoom: 19,
 
@@ -1540,79 +1524,39 @@ function getLocation() {
 
         function(error) {
 
-            console.error(
-                "Geolocation error:",
+            console.warn(
+                "Geolocation warning:",
                 error
             );
 
-
             locationCaptured = false;
-
             locationRequestInProgress = false;
-
 
             updateSubmitButton();
 
-
             if (button) {
-
                 button.disabled = false;
-
                 button.textContent =
-                    "📍 Try Location Again";
-
+                    "📍 Retry Location";
             }
 
+            const fallbackText =
+                "Location unavailable — veterinarian can review manually.";
 
-            if (!status) {
-                return;
+            if (fields.address) {
+                fields.address.value =
+                    fallbackText;
             }
 
-
-            status.classList.remove(
-                "success"
-            );
-
-            status.classList.add(
-                "error"
-            );
-
-
-            if (
-                error.code ===
-                error.PERMISSION_DENIED
-            ) {
-
+            if (status) {
+                status.classList.remove(
+                    "success"
+                );
+                status.classList.add(
+                    "error"
+                );
                 status.textContent =
-                    "❌ Location permission denied. Please allow location access and try again.";
-
-            }
-
-            else if (
-                error.code ===
-                error.POSITION_UNAVAILABLE
-            ) {
-
-                status.textContent =
-                    "❌ Your location is currently unavailable. Please try again.";
-
-            }
-
-            else if (
-                error.code ===
-                error.TIMEOUT
-            ) {
-
-                status.textContent =
-                    "❌ Location request timed out. Please try again.";
-
-            }
-
-            else {
-
-                status.textContent =
-                    "❌ Unable to get your location. Please try again.";
-
+                    "📍 " + fallbackText;
             }
 
         },
@@ -1702,109 +1646,50 @@ async function getLocationName(
 
         let readableAddress = "";
 
-
         if (data.address) {
 
-            const address =
-                data.address;
-
+            const a = data.address;
             const parts = [];
 
+            // Local area / village / suburb / hamlet / town
+            const local =
+                a.hamlet ||
+                a.village ||
+                a.suburb ||
+                a.neighbourhood ||
+                a.town ||
+                a.city ||
+                a.municipality ||
+                a.road;
 
-            /*
-             * Village
-             */
-
-            if (address.village) {
-
-                parts.push(
-                    address.village
-                );
-
+            if (local) {
+                parts.push(local);
             }
 
-            else if (address.town) {
+            // District / Mandal / Taluk / Tehsil
+            const dist =
+                a.state_district ||
+                a.district ||
+                a.subdistrict ||
+                a.county;
 
-                parts.push(
-                    address.town
-                );
-
+            if (dist && dist !== local) {
+                parts.push(dist);
             }
 
-            else if (address.city) {
-
-                parts.push(
-                    address.city
-                );
-
+            // State
+            if (a.state && a.state !== dist) {
+                parts.push(a.state);
             }
 
-            else if (address.municipality) {
-
-                parts.push(
-                    address.municipality
-                );
-
+            // Country
+            if (a.country) {
+                parts.push(a.country);
             }
 
-
-            /*
-             * District
-             */
-
-            if (address.district) {
-
-                parts.push(
-                    address.district
-                );
-
-            }
-
-            else if (address.county) {
-
-                parts.push(
-                    address.county
-                );
-
-            }
-
-
-            /*
-             * State
-             */
-
-            if (address.state) {
-
-                parts.push(
-                    address.state
-                );
-
-            }
-
-
-            /*
-             * Country
-             */
-
-            if (address.country) {
-
-                parts.push(
-                    address.country
-                );
-
-            }
-
-
-            readableAddress =
-                parts.join(", ");
+            readableAddress = parts.join(", ");
 
         }
-
-
-        /*
-         * If structured address was empty,
-         * use Nominatim's display_name.
-         */
 
         if (
             !readableAddress &&
@@ -1812,14 +1697,19 @@ async function getLocationName(
         ) {
 
             readableAddress =
-                data.display_name;
+                data.display_name.slice(0, 250);
 
         }
 
+        if (!readableAddress) {
 
-        /*
-         * SAVE READABLE ADDRESS
-         */
+            readableAddress =
+                "GPS Coordinates: " +
+                parseFloat(latitude).toFixed(4) +
+                ", " +
+                parseFloat(longitude).toFixed(4);
+
+        }
 
         if (fields.address) {
 
@@ -1828,22 +1718,7 @@ async function getLocationName(
 
         }
 
-
-        addressCaptured =
-            readableAddress.length > 0;
-
-
-        console.log(
-            "Saved location address:",
-            fields.address
-                ? fields.address.value
-                : "FIELD NOT FOUND"
-        );
-
-
-        /*
-         * UPDATE UI
-         */
+        addressCaptured = true;
 
         if (status) {
 
@@ -1856,14 +1731,9 @@ async function getLocationName(
             );
 
             status.textContent =
-                "📍 " +
-                (
-                    readableAddress ||
-                    "Location captured"
-                );
+                "📍 " + readableAddress;
 
         }
-
 
         if (button) {
 
@@ -1874,12 +1744,10 @@ async function getLocationName(
 
         }
 
-
         const check =
             document.getElementById(
                 "locationCheck"
             );
-
 
         if (check) {
 
@@ -1892,75 +1760,58 @@ async function getLocationName(
 
         }
 
-
         updateSubmitButton();
 
     }
 
-
     catch (error) {
 
-        console.error(
-            "Address lookup error:",
+        console.warn(
+            "Address lookup warning:",
             error
         );
 
+        addressCaptured = true;
 
-        /*
-         * IMPORTANT:
-         *
-         * GPS coordinates are still valid.
-         * We do NOT erase them just because
-         * address lookup failed.
-         */
-
-        addressCaptured = false;
-
+        const fallbackCoords =
+            "GPS Coordinates: " +
+            parseFloat(latitude).toFixed(4) +
+            ", " +
+            parseFloat(longitude).toFixed(4);
 
         if (fields.address) {
-
-            /*
-             * Keep an empty address instead of
-             * putting raw coordinates in the
-             * farmer-visible address field.
-             */
-
-            fields.address.value = "";
-
+            fields.address.value =
+                fallbackCoords;
         }
-
 
         if (status) {
 
             status.classList.remove(
-                "success"
-            );
-
-            status.classList.add(
                 "error"
             );
 
+            status.classList.add(
+                "success"
+            );
+
             status.textContent =
-                "⚠️ GPS location captured, but readable address could not be found. You can still submit.";
+                "📍 " + fallbackCoords;
 
         }
-
 
         if (button) {
 
             button.textContent =
-                "📍 Location Captured";
+                "✅ Location Captured";
 
             button.disabled = false;
 
         }
 
-
         const check =
             document.getElementById(
                 "locationCheck"
             );
-
 
         if (check) {
 
@@ -1972,7 +1823,6 @@ async function getLocationName(
                 "✅ GPS coordinates are ready for disease surveillance.";
 
         }
-
 
         updateSubmitButton();
 
@@ -2526,62 +2376,47 @@ document
 
 
             /*
-             * GPS validation
-             *
-             * This is the important fix.
+             * Symptoms validation
              */
-
-            if (
-                !latitudeField ||
-                !longitudeField ||
-                !latitudeField.value ||
-                !longitudeField.value
-            ) {
-
-                event.preventDefault();
-
-                alert(
-                    "Please allow location access and wait for your location to be captured before submitting."
+            const symptomsField =
+                document.getElementById(
+                    "id_symptoms"
                 );
 
-
-                getLocation();
-
+            if (
+                !symptomsField ||
+                !symptomsField.value ||
+                !symptomsField.value.trim()
+            ) {
+                event.preventDefault();
+                alert(
+                    "Please select or enter the symptoms observed in the animal."
+                );
                 return;
-
             }
 
-
             /*
-             * Make sure values are numeric.
+             * Location check & fallback
+             * Does not block submission if GPS is unavailable.
              */
-
-            const latitude =
-                parseFloat(
-                    latitudeField.value
+            const addressField =
+                document.getElementById(
+                    "id_location_address"
                 );
 
-            const longitude =
-                parseFloat(
-                    longitudeField.value
-                );
+            const hasCoordinates =
+                latitudeField &&
+                longitudeField &&
+                latitudeField.value &&
+                longitudeField.value &&
+                !Number.isNaN(parseFloat(latitudeField.value)) &&
+                !Number.isNaN(parseFloat(longitudeField.value));
 
-
-            if (
-                Number.isNaN(latitude) ||
-                Number.isNaN(longitude)
-            ) {
-
-                event.preventDefault();
-
-                alert(
-                    "Your location could not be verified. Please try again."
-                );
-
-                getLocation();
-
-                return;
-
+            if (!hasCoordinates) {
+                if (addressField && (!addressField.value || !addressField.value.trim())) {
+                    addressField.value =
+                        "Location unavailable — veterinarian can review manually.";
+                }
             }
 
 

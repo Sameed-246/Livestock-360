@@ -16,7 +16,11 @@ urlpatterns = [
         views.vet_case_detail,
         name='vet_case_detail'
     ),
-
+    path(
+    'case/<int:report_id>/mastitis/',
+    views.run_mastitis_assessment_view,
+    name='run_mastitis_assessment'
+),
     path(
         'case/<int:report_id>/status/',
         views.update_case_status,
